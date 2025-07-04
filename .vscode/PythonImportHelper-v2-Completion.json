@@ -98,16 +98,7 @@
         "kind": 5,
         "importPath": "back.server",
         "description": "back.server",
-        "peekOfCode": "app = Flask(__name__)\nCORS(app)\n# 数据库配置\ndb_config = {\n    'host': 'localhost',\n    'user': 'root',\n    'password': '20020318',\n    'database': 'user_exp',\n    'charset': 'utf8mb4'\n}",
-        "detail": "back.server",
-        "documentation": {}
-    },
-    {
-        "label": "db_config",
-        "kind": 5,
-        "importPath": "back.server",
-        "description": "back.server",
-        "peekOfCode": "db_config = {\n    'host': 'localhost',\n    'user': 'root',\n    'password': '20020318',\n    'database': 'user_exp',\n    'charset': 'utf8mb4'\n}\ndef get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():",
+        "peekOfCode": "app = Flask(__name__)\nCORS(app)\n# 读取数据库配置\nwith open('db_config.json', 'r', encoding='utf-8') as f:\n    db_config = json.load(f)\ndef get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():\n    \"\"\"从请求中获取用户ID，如果不存在则创建新的\"\"\"\n    user_id = request.headers.get('X-User-ID')",
         "detail": "back.server",
         "documentation": {}
     }
