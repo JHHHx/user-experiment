@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers['X-User-ID'] = userId;
             }
 
-            const response = await fetch('http://localhost:5000/submit', {
+            const response = await fetch('http://61.185.212.148:5000/submit', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({
