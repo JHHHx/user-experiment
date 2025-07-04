@@ -8,14 +8,9 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
-# 数据库配置
-db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': '20020318',
-    'database': 'user_exp',
-    'charset': 'utf8mb4'
-}
+# 读取数据库配置
+with open('db_config.json', 'r', encoding='utf-8') as f:
+    db_config = json.load(f)
 
 def get_db_connection():
     return pymysql.connect(**db_config)
