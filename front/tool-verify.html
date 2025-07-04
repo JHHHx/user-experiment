@@ -581,7 +581,7 @@
         }
 
         // 下一步按钮点击事件
-        document.getElementById('next-btn').onclick = function() {
+        document.getElementById('next-btn').onclick = async function() {
             if (!isNoDpImg()) {
                 const originalImgName = getCurrentOriginalImageName();
                 const reminder = document.getElementById('reminder-message');
@@ -653,6 +653,63 @@
             // 更新图片索引
             imgIndex++;
             if (imgIndex < imgOrder.length) {
+                // 收集并提交当前页面的答案
+                const answers = {};
+                const originalImgName = getCurrentOriginalImageName();
+                
+                if (originalImgName === '隐藏紧迫1.1.jpg') {
+                    // 收集双弹窗答案
+                    answers.dpAnswers = dpAnswers;
+                    answers.detailDpAnswers = detailDpAnswers;
+                } else {
+                    // 收集普通问题答案
+                    const allRadios = document.querySelectorAll('.question-content input[type="radio"]:checked');
+                    allRadios.forEach(radio => {
+                        answers[radio.name] = radio.value;
+                    });
+                }
+                
+                // 提交答案到服务器
+                try {
+                    const response = await fetch('http://localhost:5000/submit', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            content: JSON.stringify({
+                                image: originalImgName,
+                                answers: answers,
+                                timestamp: new Date().toISOString()
+                            }),
+                            page: 'tool-verify.html'
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    if (result.status !== 'success') {
+                        console.error('答案提交失败');
+                        // 保存到localStorage作为备份
+                        let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
+                        savedAnswers.push({
+                            image: originalImgName,
+                            answers: answers,
+                            timestamp: new Date().toISOString()
+                        });
+                        localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));
+                    }
+                } catch (error) {
+                    console.error('提交错误：', error);
+                    // 保存到localStorage作为备份
+                    let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
+                    savedAnswers.push({
+                        image: originalImgName,
+                        answers: answers,
+                        timestamp: new Date().toISOString()
+                    });
+                    localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));
+                }
+                
                 sessionStorage.removeItem('annotations');
                 sessionStorage.setItem('imgIndex', imgIndex.toString());
                 window.location.href = 'main-annotate.html';

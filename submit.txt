@@ -1,0 +1,27 @@
+
+1. 知情同意页面（consent.html）：
+   - 点击"确定"按钮时，会调用`submitToServer`函数提交同意记录
+   - 数据保存在`consent_records`表中
+
+2. 基本信息页面（content.html）：
+   - 提交表单时，会收集年龄、性别、专业信息
+   - 数据保存在`user_basic_info`表中
+   - 同时保存在localStorage中供后续使用
+
+3. 工具展示页面（main-demo.html）：
+   - 点击"进入正式问卷"按钮时，会记录完成时间
+   - 数据保存在`submissions`表中
+
+4. 标注页面（main-annotate.html）：
+   - 每次保存标注时，会收集标注区域和反馈内容
+   - 数据保存在`annotation_data`表中
+   - 包含图片名称、标注坐标和反馈文本
+
+5. 工具验证页面（tool-verify.html）：
+   - 点击"下一步"时，会收集所有评分答案
+   - 数据保存在`tool_verify_answers`表中
+   - 对于特殊图片（隐藏紧迫1.1.jpg）有额外的双弹窗答案处理
+
+6. 任务说明页面（main-task.html）：
+   - 点击"下一页"按钮时，会记录阅读完成时间
+   - 数据保存在`submissions`表中

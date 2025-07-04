@@ -1,0 +1,114 @@
+[
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "jsonify",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "CORS",
+        "importPath": "flask_cors",
+        "description": "flask_cors",
+        "isExtraImport": true,
+        "detail": "flask_cors",
+        "documentation": {}
+    },
+    {
+        "label": "pymysql",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pymysql",
+        "description": "pymysql",
+        "detail": "pymysql",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "uuid",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uuid",
+        "description": "uuid",
+        "detail": "uuid",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "get_db_connection",
+        "kind": 2,
+        "importPath": "back.server",
+        "description": "back.server",
+        "peekOfCode": "def get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():\n    \"\"\"从请求中获取用户ID，如果不存在则创建新的\"\"\"\n    user_id = request.headers.get('X-User-ID')\n    if not user_id:\n        user_id = str(uuid.uuid4())\n    return user_id\n@app.route('/submit', methods=['POST'])\ndef submit():",
+        "detail": "back.server",
+        "documentation": {}
+    },
+    {
+        "label": "get_or_create_user_id",
+        "kind": 2,
+        "importPath": "back.server",
+        "description": "back.server",
+        "peekOfCode": "def get_or_create_user_id():\n    \"\"\"从请求中获取用户ID，如果不存在则创建新的\"\"\"\n    user_id = request.headers.get('X-User-ID')\n    if not user_id:\n        user_id = str(uuid.uuid4())\n    return user_id\n@app.route('/submit', methods=['POST'])\ndef submit():\n    try:\n        data = request.json",
+        "detail": "back.server",
+        "documentation": {}
+    },
+    {
+        "label": "submit",
+        "kind": 2,
+        "importPath": "back.server",
+        "description": "back.server",
+        "peekOfCode": "def submit():\n    try:\n        data = request.json\n        content = data.get('content')\n        page = data.get('page')\n        user_id = get_or_create_user_id()\n        conn = get_db_connection()\n        cursor = conn.cursor()\n        # 根据页面类型分别处理数据\n        if page == 'consent.html':",
+        "detail": "back.server",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "back.server",
+        "description": "back.server",
+        "peekOfCode": "app = Flask(__name__)\nCORS(app)\n# 数据库配置\ndb_config = {\n    'host': 'localhost',\n    'user': 'root',\n    'password': '20020318',\n    'database': 'user_exp',\n    'charset': 'utf8mb4'\n}",
+        "detail": "back.server",
+        "documentation": {}
+    },
+    {
+        "label": "db_config",
+        "kind": 5,
+        "importPath": "back.server",
+        "description": "back.server",
+        "peekOfCode": "db_config = {\n    'host': 'localhost',\n    'user': 'root',\n    'password': '20020318',\n    'database': 'user_exp',\n    'charset': 'utf8mb4'\n}\ndef get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():",
+        "detail": "back.server",
+        "documentation": {}
+    }
+]
