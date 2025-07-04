@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Pattern - 知情同意</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dark Pattern</h1>
+        <div class="consent-box">
+            <h2>用户调查问卷知情同意书</h2>
+            <div class="consent-content">
+                <p>尊敬的用户：</p>
+                <p>感谢您参与本次调查问卷。在开始之前，请您仔细阅读以下内容：</p>
+                <ul>
+                    <li>本调查问卷采用匿名方式进行，不会收集任何可以识别您个人身份的信息。</li>
+                    <li>您的所有回答将被严格保密，仅用于研究目的。</li>
+                    <li>您可以随时选择退出调查，且不会产生任何负面影响。</li>
+                    <li>参与本调查完全自愿，您可以选择是否参与。</li>
+                </ul>
+                <p>如果您同意以上内容，请勾选下方选项并点击"确定"按钮继续。</p>
+            </div>
+            <div class="consent-checkbox">
+                <input type="checkbox" id="consent-check" required>
+                <label for="consent-check">我已阅读并同意上述内容</label>
+            </div>
+            <button id="consent-button" disabled>确定</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById('consent-check').onchange = function() {
+            document.getElementById('consent-button').disabled = !this.checked;
+        };
+        
+        document.getElementById('consent-button').onclick = function() {
+            if (document.getElementById('consent-check').checked) {
+                window.location.href = 'index.html';
+            }
+        };
+    </script>
+</body>
+</html> 

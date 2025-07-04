@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工具标注展示样例</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .container {
+            max-width: 1600px;
+            padding: 2rem;
+        }
+        .demo-section {
+            margin-top: 0.5rem;
+        }
+        .demo-desc {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .demo-img-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            padding: 1rem;
+            margin: 0 auto;
+            max-width: 1600px;
+        }
+        .demo-img-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .demo-img {
+            width: auto;
+            height: 500px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        .demo-label {
+            font-weight: bold;
+            text-align: center;
+            font-size: 1rem;
+            color: #333;
+        }
+        #demo-next {
+            display: block;
+            width: 200px;
+            margin: 0.5rem auto 0;
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #demo-next:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>工具标注展示样例</h1>
+        <div class="survey-box demo-section">
+            <div class="demo-desc">
+                <b>以下是使用我们的工具对同一图片标注的展示：<br>
+                1：在对图片进行DP框选后会在其右下角放置DP按钮，即图片1中红色的DP。<br>
+                2：点击后出现该DP基本信息及提示如图2。<br>
+                3：点击右下角详细信息后出现关于DP的详细信息如图3。</b>
+            </div>
+            <div class="demo-img-grid">
+                <div class="demo-img-box">
+                    <img src="example_image/image1.jpg" alt="原图" class="demo-img">
+                    <div class="demo-label">原图</div>
+                </div>
+                <div class="demo-img-box">
+                    <img src="example_image/图片1.jpg" alt="样例图片1" class="demo-img">
+                    <div class="demo-label">图片1：右下角红色dp按钮</div>
+                </div>
+                <div class="demo-img-box">
+                    <img src="example_image/图片2.jpg" alt="样例图片2" class="demo-img">
+                    <div class="demo-label">图片2：点击dp按钮后弹出基本信息</div>
+                </div>
+                <div class="demo-img-box">
+                    <img src="example_image/图片3.jpg" alt="样例图片3" class="demo-img">
+                    <div class="demo-label">图片3：点击详细信息后显示详细内容</div>
+                </div>
+            </div>
+            <button id="demo-next">进入正式问卷</button>
+        </div>
+    </div>
+    <script>
+    document.getElementById('demo-next').onclick = function() {
+        window.location.href = 'main-annotate.html';
+    };
+    </script>
+</body>
+</html> 

@@ -1,0 +1,123 @@
+[
+    {
+        "image": "干预1.1.jpg",
+        "question_name": [
+            "干预性提示",
+            "建议",
+            "原因"
+        ],
+        "question_name1": [
+            "干预性提示"
+        ]
+    },
+    {
+        "image": "干预2.1.jpg",
+        "question_name": [
+            "干预性提示",
+            "建议",
+            "原因"
+        ],
+        "question_name1": [
+            "干预性提示"
+        ]
+    },
+    {
+        "image": "预设1.1.jpg",
+        "question_name": [
+            "预设模式",
+            "建议",
+            "原因"
+        ],
+        "question_name1": [
+            "预设模式"
+        ]
+    },
+    {
+        "image": "隐藏2.1.jpg",
+        "question_name": [
+            "隐藏成本",
+            "建议",
+            "金额计算"
+        ],
+        "question_name1": [
+            "隐藏成本"
+        ]
+    },
+    {
+        "image": "情感1.1.jpg",
+        "question_name": [
+            "情感操控",
+            "建议",
+            "原因"
+        ],
+        "question_name1": [
+            "情感操控"
+        ]
+    },
+    {
+        "image": "情感操控1.1.jpg",
+        "question_name": [
+            "情感操控",
+            "操控性设计",
+            "建议",
+            "原因"
+        ],
+        "question_name1": [
+            "情感操控",
+            "操纵性设计"
+        ]
+    },
+    {
+        "image": "紧迫情感1.1.jpg",
+        "question_name": [
+            "制造紧迫感",
+            "情感操控",
+            "建议",
+            "原因"
+        ],
+        "question_name1": [
+            "制造紧迫感",
+            "情感操控"
+        ]
+    },
+    {
+        "image": "紧迫1.1.jpg",
+        "question_name": [
+            "制造紧迫感",
+            "建议",
+            "原因"
+        ],
+        "question_name1": [
+            "制造紧迫感"
+        ]
+    },
+    {
+        "image": "操控2.1.jpg",
+        "question_name": [
+            "操控性设计",
+            "金额计算"
+        ],
+        "question_name1": [
+            "操控性设计"
+        ]
+    },
+    {
+        "image": "隐藏紧迫1.1.jpg",
+        "question_name": [[
+            "隐藏成本",
+            "建议",
+            "原因"
+        ],
+        [
+            "制造紧迫感",
+            "建议",
+            "原因"
+        ]],
+        "question_name1": [[
+            "隐藏成本"
+        ],
+        [
+            "制造紧迫感"
+        ]]
+    }
+]

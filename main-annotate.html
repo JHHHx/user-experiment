@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正式评估环节</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        .container {
+            padding: 2rem;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .survey-box {
+            width: 100%;
+            margin: 1rem auto;
+            padding: 1rem;
+        }
+        .annotate-header {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .annotate-main {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 2rem;
+            width: 100%;
+        }
+        .img-box {
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 800px;
+        }
+        .img-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin: 0.5rem 0;
+            min-height: 800px;
+        }
+        .annotate-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+        #rect-canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: all;
+        }
+        .tool-buttons {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0 0.5rem 0;
+    justify-content: center;
+}
+.clear-btn {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+        .category-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem 1rem;
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-width: 220px;
+        }
+        .category-box label {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .confirm-btn {
+            margin-top: 0.5rem;
+            padding: 0.7rem 0;
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .next-btn {
+            margin: 1rem auto 0 auto;
+            display: block;
+            width: 300px;
+            max-width: 90vw;
+            padding: 1rem;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .annotation-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+            min-width: 110px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="survey-box">
+            <div class="annotate-header" id="img-progress">第1张（共12张）</div>
+            <div class="annotate-main">
+                <div id="annotation-list" class="annotation-list"></div>
+                <div class="img-box">
+                    <img id="main-img" src="test_image/干预1.1.jpg" alt="待标注图片" class="annotate-img">
+                    <canvas id="rect-canvas" style="position:absolute;left:0;top:0;pointer-events:none;cursor:default;"></canvas>
+                    <div class="tool-buttons">
+                        <button class="clear-btn" id="clear-btn" title="清除标注">✕</button>
+                    </div>
+                </div>
+                <div class="category-box" id="category-box">
+                    <div style="font-weight:bold; font-size:1.1rem; margin-bottom:0.5rem;">请填写您认为标注部分存在什么暗黑模式？在日常的使用中您看到这样的信息（设计）对您有什么影响？</div>
+                    <textarea id="dp_feedback" style="width: 100%; min-height: 150px; padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px; margin-top: 0.5rem; font-size: 1rem; resize: vertical;" placeholder="请在这里输入您的想法..."></textarea>
+                    <div style="margin-top: 0.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" id="no_dp_checkbox" style="width: 16px; height: 16px;">
+                            <span>该界面没有暗黑模式</span>
+                        </label>
+                    </div>
+                    <button class="confirm-btn" id="confirm-btn">保存</button>
+                    <div id="error-message" style="color: #e74c3c; font-size: 0.9rem; margin-top: 0.5rem; text-align: center; display: none;"></div>
+                    <div id="confirm-dialog" style="display: none; margin-top: 0.5rem; text-align: center;">
+                        <div style="margin-bottom: 0.5rem;">是否确认保存该组标注和反馈？</div>
+                        <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                            <button id="confirm-yes" style="padding: 0.5rem 1rem; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">确定</button>
+                            <button id="confirm-no" style="padding: 0.5rem 1rem; background: #95a5a6; color: white; border: none; border-radius: 4px; cursor: pointer;">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="next-btn" id="next-btn">下一步</button>
+        </div>
+    </div>
+    <script>
+    // 图片文件名列表
+    const imgList = [
+        '干预1.1.jpg', '干预2.1.jpg', '预设1.1.jpg', '隐藏2.1.jpg', '情感1.1.jpg', '情感操控1.1.jpg',
+        '紧迫1.1.jpg', '紧迫情感1.1.jpg', '操控2.1.jpg', 'no dp1.jpg', 'no dp2.jpg', '隐藏紧迫1.1.jpg'
+    ];
+    // 随机顺序
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+    
+    // 获取或初始化图片顺序和索引
+    let imgOrder = JSON.parse(sessionStorage.getItem('imgOrder'));
+    let imgIndex = parseInt(sessionStorage.getItem('imgIndex') || '0');
+    
+    // 如果没有图片顺序，初始化它
+    if (!imgOrder) {
+        imgOrder = shuffle([...imgList]);
+        sessionStorage.setItem('imgOrder', JSON.stringify(imgOrder));
+        imgIndex = 0;
+        sessionStorage.setItem('imgIndex', '0');
+    }
+    
+    // 设置图片和进度
+    function setImg() {
+        const mainImg = document.getElementById('main-img');
+        // 先清除旧的图片源
+        mainImg.src = '';
+        // 设置新的图片源
+        setTimeout(() => {
+            mainImg.src = 'test_image/' + imgOrder[imgIndex];
+            document.getElementById('img-progress').innerText = `第${imgIndex+1}张（共12张）`;
+            
+            // 确保图片加载后再调整canvas
+            mainImg.onload = function() {
+                setTimeout(resizeCanvas, 100);
+                console.log('图片加载完成：', imgOrder[imgIndex]); // 添加调试日志
+            };
+            
+            // 添加错误处理
+            mainImg.onerror = function() {
+                console.error('图片加载失败：', imgOrder[imgIndex]);
+                alert('图片加载失败，请刷新页面重试');
+            };
+        }, 100);
+    }
+    
+    // 立即调用设置图片
+    setImg();
+    
+    // 添加调试信息
+    console.log('当前图片索引：', imgIndex);
+    console.log('当前图片文件：', imgOrder[imgIndex]);
+
+    // ========== 画矩形功能 ==========
+    const clearBtn = document.getElementById('clear-btn');
+    const mainImg = document.getElementById('main-img');
+    const rectCanvas = document.getElementById('rect-canvas');
+    let drawing = false;
+    let startX = 0, startY = 0, endX = 0, endY = 0;
+    let ctx = rectCanvas.getContext('2d');
+    let rectangles = []; // 当前组矩形
+    let annotations = []; // 所有标注组 {rectangles, category}
+    let currentGroup = 0; // 当前标注组索引
+    let isDrawingEnabled = true; // 默认允许绘制
+    let scaleX = 1, scaleY = 1;
+
+    function resizeCanvas() {
+        const img = document.getElementById('main-img');
+        const canvas = document.getElementById('rect-canvas');
+        
+        // 等待图片加载完成
+        if (!img.complete) {
+            img.onload = resizeCanvas;
+            return;
+        }
+        
+        // 获取图片实际显示尺寸
+        const rect = img.getBoundingClientRect();
+        
+        // 设置canvas尺寸与图片显示尺寸完全一致
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        canvas.style.width = rect.width + 'px';
+        canvas.style.height = rect.height + 'px';
+        
+        // 更新缩放比例
+        scaleX = canvas.width / img.naturalWidth;
+        scaleY = canvas.height / img.naturalHeight;
+        
+        // 确保canvas位置与图片完全重合
+        canvas.style.left = '50%';
+        canvas.style.transform = 'translateX(-50%)';
+        
+        redrawRectangles();
+    }
+
+    // 重绘所有矩形
+    function redrawRectangles() {
+        ctx.clearRect(0, 0, rectCanvas.width, rectCanvas.height);
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = '#e74c3c';
+        ctx.lineWidth = 2;
+        rectangles.forEach(rect => {
+            ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+        });
+    }
+
+    // 初始化画布状态
+    function initCanvas() {
+        if (isDrawingEnabled) {
+            rectCanvas.style.pointerEvents = 'auto';
+            rectCanvas.style.cursor = 'crosshair';
+        } else {
+            rectCanvas.style.pointerEvents = 'none';
+            rectCanvas.style.cursor = 'default';
+        }
+    }
+    initCanvas();
+
+    rectCanvas.onmousedown = function(e) {
+        if (!isDrawingEnabled) return;
+        drawing = true;
+        const rect = rectCanvas.getBoundingClientRect();
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+        endX = startX;
+        endY = startY;
+    };
+
+    rectCanvas.onmousemove = function(e) {
+        if (!isDrawingEnabled || !drawing) return;
+        const rect = rectCanvas.getBoundingClientRect();
+        endX = e.clientX - rect.left;
+        endY = e.clientY - rect.top;
+        redrawRectangles();
+        // 绘制当前正在画的矩形
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = '#e74c3c';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+    };
+
+    rectCanvas.onmouseup = function(e) {
+        if (!isDrawingEnabled || !drawing) return;
+        drawing = false;
+        const rect = rectCanvas.getBoundingClientRect();
+        endX = e.clientX - rect.left;
+        endY = e.clientY - rect.top;
+        
+        // 保存新矩形
+        rectangles.push({
+            x: Math.min(startX, endX),
+            y: Math.min(startY, endY),
+            width: Math.abs(endX - startX),
+            height: Math.abs(endY - startY)
+        });
+        
+        redrawRectangles();
+    };
+
+    // 鼠标移出canvas时停止绘制
+    rectCanvas.onmouseleave = function() {
+        if (drawing) {
+            drawing = false;
+            redrawRectangles();
+        }
+    };
+
+    // 清除按钮功能
+    clearBtn.onclick = function() {
+        rectangles = [];
+        ctx.clearRect(0, 0, rectCanvas.width, rectCanvas.height);
+        isDrawingEnabled = true;  // 保持绘制功能启用
+        rectCanvas.style.pointerEvents = 'auto';  // 保持画布可交互
+        rectCanvas.style.cursor = 'crosshair';  // 保持鼠标样式为十字
+        drawing = false;
+    };
+
+    // 添加窗口大小改变时的处理
+    window.addEventListener('resize', function() {
+        requestAnimationFrame(resizeCanvas);
+    });
+
+    // 图片加载完成时调整canvas
+    document.getElementById('main-img').onload = function() {
+        setTimeout(resizeCanvas, 100);
+    };
+    // ========== 画矩形功能 END ==========
+
+    // 标注组切换与渲染
+    function renderAnnotationList() {
+        const list = document.getElementById('annotation-list');
+        list.innerHTML = '';
+        annotations.forEach((item, idx) => {
+            const btn = document.createElement('button');
+            btn.textContent = `标注${idx+1}`;
+            btn.style.padding = '0.7rem 1rem';
+            btn.style.margin = '0';
+            btn.style.borderRadius = '8px';
+            btn.style.fontWeight = 'bold';
+            btn.style.fontSize = '0.8rem';
+            btn.style.width = '100%';
+            btn.style.textAlign = 'center';
+            btn.style.border = idx===currentGroup?'2px solid #3498db':'1px solid #ccc';
+            btn.style.background = idx===currentGroup?'#eaf6fb':'#fff';
+            btn.style.color = '#333';
+            btn.style.cursor = 'pointer';
+            btn.style.transition = 'all 0.2s ease';
+            btn.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+            
+            btn.onmouseover = () => {
+                if (idx !== currentGroup) {
+                    btn.style.background = '#f5f5f5';
+                }
+            };
+            btn.onmouseout = () => {
+                if (idx !== currentGroup) {
+                    btn.style.background = '#fff';
+                }
+            };
+            
+            btn.onclick = () => {
+                currentGroup = idx;
+                rectangles = annotations[idx].rectangles || [];
+                redrawRectangles();
+                // 恢复保存的反馈内容
+                document.getElementById('dp_feedback').value = annotations[idx].feedback || '';
+                setEditMode(false);
+                if (annotations[idx].annotatedImage) {
+                    const img = document.getElementById('main-img');
+                    img.src = annotations[idx].annotatedImage;
+                    img.onload = () => {
+                        resizeCanvas();
+                    };
+                }
+                renderAnnotationList();
+            };
+            list.appendChild(btn);
+        });
+        
+        const btn = document.createElement('button');
+        btn.textContent = `新标注`;
+        btn.style.padding = '0.7rem 1rem';
+        btn.style.margin = '0';
+        btn.style.borderRadius = '8px';
+        btn.style.fontWeight = 'bold';
+        btn.style.fontSize = '0.8rem';
+        btn.style.width = '100%';
+        btn.style.textAlign = 'center';
+        btn.style.border = currentGroup===annotations.length?'2px solid #3498db':'1px solid #3498db';
+        btn.style.background = currentGroup===annotations.length?'#eaf6fb':'#fff';
+        btn.style.color = '#3498db';
+        btn.style.cursor = 'pointer';
+        btn.style.transition = 'all 0.2s ease';
+        
+        btn.onmouseover = () => {
+            if (currentGroup !== annotations.length) {
+                btn.style.background = '#f8f9fa';
+            }
+        };
+        btn.onmouseout = () => {
+            if (currentGroup !== annotations.length) {
+                btn.style.background = '#fff';
+            }
+        };
+        
+        btn.onclick = () => {
+            currentGroup = annotations.length;
+            rectangles = [];
+            redrawRectangles();
+            const img = document.getElementById('main-img');
+            img.src = `test_image/${imgOrder[imgIndex]}`;
+            img.onload = () => {
+                resizeCanvas();
+            };
+            document.getElementById('dp_feedback').value = ''; // 清空反馈内容
+            setEditMode(true);
+            renderAnnotationList();
+        };
+        list.appendChild(btn);
+    }
+
+    // 编辑模式切换
+    function setEditMode(editable) {
+        if (editable) {
+            isDrawingEnabled = true;
+            clearBtn.disabled = false;
+            document.getElementById('confirm-btn').disabled = false;
+            document.getElementById('dp_feedback').disabled = false;
+        } else {
+            isDrawingEnabled = false;
+            rectCanvas.style.pointerEvents = 'none';
+            rectCanvas.style.cursor = 'default';
+            clearBtn.disabled = true;
+            document.getElementById('confirm-btn').disabled = true;
+            document.getElementById('dp_feedback').disabled = true;
+        }
+        initCanvas();
+    }
+
+    // 确认按钮功能
+    document.getElementById('confirm-btn').onclick = async function() {
+        const feedback = document.getElementById('dp_feedback').value.trim();
+        const noDpCheckbox = document.getElementById('no_dp_checkbox');
+        const errorMessage = document.getElementById('error-message');
+        const confirmDialog = document.getElementById('confirm-dialog');
+        
+        // 重置显示状态
+        errorMessage.style.display = 'none';
+        confirmDialog.style.display = 'none';
+        
+        // 验证输入
+        if (!noDpCheckbox.checked && !feedback) {
+            errorMessage.textContent = '请填写您的想法';
+            errorMessage.style.display = 'block';
+            return;
+        }
+        if (!noDpCheckbox.checked && rectangles.length === 0) {
+            errorMessage.textContent = '请先在图片上标注区域或选择"该界面没有暗黑模式"';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // 显示确认对话框
+        confirmDialog.style.display = 'block';
+    };
+
+    // 确认对话框的按钮事件
+    document.getElementById('confirm-yes').onclick = async function() {
+        const feedback = document.getElementById('dp_feedback').value.trim();
+        const noDpCheckbox = document.getElementById('no_dp_checkbox');
+            try {
+                let annotatedImageBase64 = '';
+                
+                if (!noDpCheckbox.checked) {
+                    const img = document.getElementById('main-img');
+                    const imgRect = img.getBoundingClientRect();
+                    const canvasRect = rectCanvas.getBoundingClientRect();
+                    
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = img.naturalWidth;
+                    tempCanvas.height = img.naturalHeight;
+                    const ctx = tempCanvas.getContext('2d');
+                    
+                    ctx.drawImage(img, 0, 0, tempCanvas.width, tempCanvas.height);
+                    
+                    const imgDisplayWidth = imgRect.width;
+                    const imgDisplayHeight = imgRect.height;
+                    
+                    const scaleFactorX = img.naturalWidth / imgDisplayWidth;
+                    const scaleFactorY = img.naturalHeight / imgDisplayHeight;
+                    
+                    const offsetX = imgRect.left - canvasRect.left;
+                    const offsetY = imgRect.top - canvasRect.top;
+                    
+                    ctx.strokeStyle = '#e74c3c';
+                    ctx.lineWidth = Math.max(2, Math.floor(tempCanvas.width / 200));
+                    ctx.setLineDash([6, 4]);
+                    
+                    rectangles.forEach(rect => {
+                        const imgX = rect.x - offsetX;
+                        const imgY = rect.y - offsetY;
+                        
+                        const originalX = imgX * scaleFactorX;
+                        const originalY = imgY * scaleFactorY;
+                        const originalWidth = rect.width * scaleFactorX;
+                        const originalHeight = rect.height * scaleFactorY;
+                        
+                        ctx.strokeRect(originalX, originalY, originalWidth, originalHeight);
+                    });
+                    
+                    annotatedImageBase64 = tempCanvas.toDataURL('image/png');
+                } else {
+                    // 如果选中了"没有暗黑模式"，直接使用原图
+                    annotatedImageBase64 = document.getElementById('main-img').src;
+                }
+                
+                annotations.push({
+                    feedback: noDpCheckbox.checked ? '该界面没有暗黑模式' : feedback,
+                    rectangles: noDpCheckbox.checked ? [] : [...rectangles],
+                    annotatedImage: annotatedImageBase64,
+                    hasNoDp: noDpCheckbox.checked
+                });
+                
+                currentGroup = annotations.length;
+                rectangles = [];
+                redrawRectangles();
+                document.getElementById('dp_feedback').value = '';
+                document.getElementById('no_dp_checkbox').checked = false;
+                document.getElementById('confirm-dialog').style.display = 'none';
+                setEditMode(true);
+                renderAnnotationList();
+            } catch (error) {
+                console.error('截图失败:', error);
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = '保存标注图片失败，请重试';
+                errorMessage.style.display = 'block';
+            }
+    };
+
+    document.getElementById('confirm-no').onclick = function() {
+        document.getElementById('confirm-dialog').style.display = 'none';
+    };
+
+    // 监听复选框变化
+    document.getElementById('no_dp_checkbox').addEventListener('change', function() {
+        const clearBtn = document.getElementById('clear-btn');
+        const canvas = document.getElementById('rect-canvas');
+        const feedbackTextarea = document.getElementById('dp_feedback');
+        
+        if (this.checked) {
+            // 如果选中"没有暗黑模式"，清除所有标注并禁用标注功能
+            rectangles = [];
+            redrawRectangles();
+            isDrawingEnabled = false;
+            canvas.style.pointerEvents = 'none';
+            canvas.style.cursor = 'default';
+            clearBtn.disabled = true;
+            // 禁用并清空反馈文本框
+            feedbackTextarea.disabled = true;
+            feedbackTextarea.value = '';
+            feedbackTextarea.style.backgroundColor = '#f5f5f5';
+        } else {
+            // 如果取消选中，恢复标注功能
+            isDrawingEnabled = true;
+            canvas.style.pointerEvents = 'auto';
+            canvas.style.cursor = 'crosshair';
+            clearBtn.disabled = false;
+            // 启用反馈文本框
+            feedbackTextarea.disabled = false;
+            feedbackTextarea.style.backgroundColor = '#ffffff';
+        }
+    });
+
+    // 初始化标注组列表
+    renderAnnotationList();
+    setEditMode(true);
+
+    // 下一步
+    document.getElementById('next-btn').onclick = function() {
+        if (annotations.length === 0) {
+            alert('请至少保存一组标注后再进行下一步');
+            return;
+        }
+        sessionStorage.setItem('annotations', JSON.stringify(annotations));
+        window.location.href = `tool-verify.html?img=${imgOrder[imgIndex]}`;
+    };
+    </script>
+</body>
+</html> 

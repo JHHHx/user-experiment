@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Pattern - 调查问卷</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dp-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .dp-list > li {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 4px solid #3498db;
+        }
+        
+        .dp-list > li:nth-child(1) { border-left-color: #e74c3c; }
+        .dp-list > li:nth-child(2) { border-left-color: #f39c12; }
+        .dp-list > li:nth-child(3) { border-left-color: #27ae60; }
+        .dp-list > li:nth-child(4) { border-left-color: #8e44ad; }
+        .dp-list > li:nth-child(5) { border-left-color: #16a085; }
+        .dp-list > li:nth-child(6) { border-left-color: #2980b9; }
+        
+        .dp-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            display: block;
+        }
+        
+        .dp-desc {
+            color: #34495e;
+            margin: 0.5rem 0;
+            line-height: 1.6;
+        }
+        
+        .dp-label {
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+        
+        .dp-examples {
+            list-style: disc;
+            margin: 0.8rem 0 0 1.2rem;
+            padding-left: 0.5rem;
+        }
+        
+        .dp-examples li {
+            color: #34495e;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dark Pattern</h1>
+        <div class="survey-box">
+            <!-- 第1页：基本信息 -->
+            <form id="page1" class="survey-page">
+                <div class="question">
+                    <p>1. 您的年龄段：</p>
+                    <select name="age" required>
+                        <option value="">请选择</option>
+                        <option value="18-24">18-24岁</option>
+                        <option value="25-34">25-34岁</option>
+                        <option value="35-44">35-44岁</option>
+                        <option value="45-54">45-54岁</option>
+                        <option value="55+">55岁以上</option>
+                    </select>
+                </div>
+                <div class="question">
+                    <p>2. 您的性别：</p>
+                    <select name="gender" required>
+                        <option value="">请选择</option>
+                        <option value="male">男</option>
+                        <option value="female">女</option>
+                        <option value="prefer_not_to_say">不愿透露</option>
+                    </select>
+                </div>
+                <div class="question">
+                    <p>3. 您所学习的专业或者从事的行业是：</p>
+                    <input type="text" name="major" placeholder="请输入您的专业或行业" required>
+                </div>
+                <button type="submit" onclick="validateAndNext(event)">下一页</button>
+            </form>
+
+            <!-- 第2页：Dark Pattern简介 -->
+            <div id="page2" class="survey-page" style="display:none;">
+                <div class="question">
+                    <h2>什么是Dark Pattern？</h2>
+                    <p>Dark Pattern（暗黑模式设计）是指在网站或应用中，设计者故意采用误导性界面或交互方式，引导用户做出非本意的选择，从而达到某些商业目的。例如：难以取消订阅、默认勾选隐私选项、隐藏重要信息等。这些设计可能会影响用户的决策和体验。</p>
+                </div>
+                <button onclick="showPage('page3')">下一页</button>
+            </div>
+
+            <!-- 第3页：Dark Pattern分类描述 -->
+            <div id="page3" class="survey-page" style="display:none;">
+                <div class="question">
+                    <h2>Dark Pattern 分类及描述</h2>
+                    <p style="font-weight:bold;color:#e67e22;">请花2分钟阅读当前我们对Dark Pattern的分类以及对应描述，在稍后的问题中会用到。</p>
+                    <ul class="dp-list">
+                        <li>
+                            <span class="dp-title">干预性提示（突然弹窗轰炸）</span>
+                            <div class="dp-desc">
+                                <span class="dp-label">描述：</span>频繁弹窗打扰你的正常操作，让你不得不暂停并处理它。
+                            </div>
+                            <div class="dp-desc">
+                                <span class="dp-label">常见场景：</span>
+                                <ul class="dp-examples">
+                                    <li>看视频时突然弹窗提示"订阅会员可去广告"</li>
+                                    <li>打开App时强制要求"允许通讯录权限"或"开启消息通知"</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="dp-title">预设模式（默认勾选套路）</span>
+                            <div class="dp-desc">
+                                <span class="dp-label">描述：</span>默认勾选了某些设置，导致你无意间同意额外收费或授权隐私。
+                            </div>
+                            <div class="dp-desc">
+                                <span class="dp-label">常见场景：</span>
+                                <ul class="dp-examples">
+                                    <li>注册账号时默认勾选"订阅营销邮件"</li>
+                                    <li>购买服务时默认开启自动续费功能，未明显提醒</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="dp-title">隐藏成本（偷偷加价）</span>
+                            <div class="dp-desc">
+                                <span class="dp-label">描述：</span>付款时才发现突然多出一笔费用，让你实际支付的比预期高出不少。
+                            </div>
+                            <div class="dp-desc">
+                                <span class="dp-label">常见场景：</span>
+                                <ul class="dp-examples">
+                                    <li>购物结账时才发现高额的"配送费"或"服务费"</li>
+                                    <li>免费试用期结束后未提醒直接自动扣费</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="dp-title">情感操控（心理施压）</span>
+                            <div class="dp-desc">
+                                <span class="dp-label">描述：</span>利用情感、内疚感或从众心理，逼你快速做出冲动选择。
+                            </div>
+                            <div class="dp-desc">
+                                <span class="dp-label">常见场景：</span>
+                                <ul class="dp-examples">
+                                    <li>退出购买页面时提示"你真的要错过这个好机会吗？"</li>
+                                    <li>商品标记"已有1万人购买"，实际上可能数据造假</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="dp-title">制造紧迫感（倒计时逼单）</span>
+                            <div class="dp-desc">
+                                <span class="dp-label">描述：</span>通过倒计时或库存不足的提示，让你紧张焦虑快速下单。
+                            </div>
+                            <div class="dp-desc">
+                                <span class="dp-label">常见场景：</span>
+                                <ul class="dp-examples">
+                                    <li>网购时页面提示"优惠仅剩10分钟，过期恢复原价"</li>
+                                    <li>商品标注"库存仅剩3件，手慢无"</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="dp-title">操控性设计（按钮陷阱）</span>
+                            <div class="dp-desc">
+                                <span class="dp-label">描述：</span>通过按钮的颜色、大小、位置设计，让你误点自己本不想点的选项。
+                            </div>
+                            <div class="dp-desc">
+                                <span class="dp-label">常见场景：</span>
+                                <ul class="dp-examples">
+                                    <li>下载按钮旁边放置醒目的广告按钮，让你误点广告</li>
+                                    <li>取消按钮设计得又小又浅色，"确认购买"按钮则又大又鲜艳</li>
+                                    <li>故意把"是"和"否"位置颠倒，导致快速操作时选错</li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <button onclick="window.location.href='main-task.html'">下一页</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validateAndNext(event) {
+            event.preventDefault();
+            const age = document.querySelector('select[name="age"]').value;
+            const gender = document.querySelector('select[name="gender"]').value;
+            const major = document.querySelector('input[name="major"]').value;
+            
+            if (!age || !gender || !major) {
+                alert('请填写所有必填项');
+                return;
+            }
+            
+            showPage('page2');
+        }
+
+        function showPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.survey-page').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // 显示目标页面
+            document.getElementById(pageId).style.display = 'block';
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html> 

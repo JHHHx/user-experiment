@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务要求</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .task-section {
+            margin-top: 2rem;
+        }
+        .task-desc {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            font-size: 1.15rem;
+            line-height: 2;
+        }
+        .task-desc ol {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+        .task-desc li {
+            margin-bottom: 1.2rem;
+        }
+        .task-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="survey-box task-section">
+            <div class="task-title">任务要求</div>
+            <div class="task-desc">
+                在正式评估环节，系统将逐一呈现12个测试界面（顺序随机）。对于每一个界面，依次执行以下步骤：
+                <ol>
+                    <li>
+                        <b>自主标注阶段：</b>观看当前的界面截图，判断该界面上是否存在暗黑模式。若认为有，则在截图上用绘制框圈出可疑的界面元素，并填写这些地方可能存在什么暗黑模式以及可能会对您产生什么影响，
+                        如果认为有多个不同暗黑模式，则在保存上一组标签后可在新的图片上绘制并填写；若未发现任何暗黑模式，则可填写没有暗黑模式。最后点击"下一步"进入下一环节。
+                    </li>
+                    <li>
+                        <b>工具结果查看阶段：</b>提交自主标注后，将显示该界面的工具检测结果。呈现内容包括：<br>
+                        (a) 原始界面截图（供对比），<br>
+                        (b) 工具标注了暗黑模式区域的截图，<br>
+                        (c) 工具识别的暗黑模式类型名称及定义，<br>
+                        (d) 针对该界面的暗黑模式详细解释说明。<br>
+                        参与者可以花时间阅读并理解工具给出的标记和解释。
+                    </li>
+                </ol>
+            </div>
+            <button id="start-eval" style="width:100%;margin-top:1.5rem;">下一页</button>
+        </div>
+    </div>
+    <script>
+    document.getElementById('start-eval').onclick = function() {
+        window.location.href = 'main.html';
+    };
+    </script>
+</body>
+</html> 
