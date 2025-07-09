@@ -89,7 +89,7 @@
         "kind": 2,
         "importPath": "back.server",
         "description": "back.server",
-        "peekOfCode": "def submit():\n    try:\n        data = request.json\n        content = data.get('content')\n        page = data.get('page')\n        user_id = get_or_create_user_id()\n        conn = get_db_connection()\n        cursor = conn.cursor()\n        # 根据页面类型分别处理数据\n        if page == 'consent.html':",
+        "peekOfCode": "def submit():\n    try:\n        data = request.json\n        content = data.get('content')\n        page = data.get('page')\n        user_id = get_or_create_user_id()\n        print(f\"收到提交请求:\")\n        print(f\"  页面: {page}\")\n        print(f\"  用户ID: {user_id}\")\n        print(f\"  内容: {content}\")",
         "detail": "back.server",
         "documentation": {}
     },
@@ -98,7 +98,16 @@
         "kind": 5,
         "importPath": "back.server",
         "description": "back.server",
-        "peekOfCode": "app = Flask(__name__)\nCORS(app)\n# 读取数据库配置\nwith open('db_config.json', 'r', encoding='utf-8') as f:\n    db_config = json.load(f)\ndef get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():\n    \"\"\"从请求中获取用户ID，如果不存在则创建新的\"\"\"\n    user_id = request.headers.get('X-User-ID')",
+        "peekOfCode": "app = Flask(__name__)\nCORS(app)\n# 调试模式标记\nDEBUG_MODE = False\n# 读取数据库配置\nwith open('db_config.json', 'r', encoding='utf-8') as f:\n    db_config = json.load(f)\ndef get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():",
+        "detail": "back.server",
+        "documentation": {}
+    },
+    {
+        "label": "DEBUG_MODE",
+        "kind": 5,
+        "importPath": "back.server",
+        "description": "back.server",
+        "peekOfCode": "DEBUG_MODE = False\n# 读取数据库配置\nwith open('db_config.json', 'r', encoding='utf-8') as f:\n    db_config = json.load(f)\ndef get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():\n    \"\"\"从请求中获取用户ID，如果不存在则创建新的\"\"\"\n    user_id = request.headers.get('X-User-ID')\n    if not user_id:",
         "detail": "back.server",
         "documentation": {}
     }

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // 获取或生成用户ID
-    function getUserId() {
+    window.getUserId = function() {
         let userId = localStorage.getItem('userId');
         if (!userId) {
             // 首次访问时，等待服务器分配ID
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 通用提交函数
-    async function submitToServer(data, pageName) {
+    window.submitToServer = async function(data, pageName) {
         try {
             const userId = getUserId();
             const headers = {
@@ -20,16 +20,122 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers['X-User-ID'] = userId;
             }
 
-            const response = await fetch('http://61.185.212.148:5000/submit', {
+            // 根据页面名称设置对应的表名和数据类型
+            let table = '';
+            let type = '';
+            switch(pageName) {
+                case 'index.html':
+                    table = 'consent_records';
+                    type = 'consent';
+                    break;
+                case 'content.html':
+                    table = 'user_basic_info';
+                    type = 'basic_info';
+                    break;
+                case 'main-demo.html':
+                case 'main-task.html':
+                    table = 'submissions';
+                    type = 'completion';
+                    break;
+                case 'main-annotate.html':
+                case 'main-annotate-complete':
+                    table = 'annotation_data';
+                    type = 'annotation';
+                    break;
+                case 'tool-verify.html':
+                    table = 'tool_verify_answers';
+                    type = 'verification';
+                    break;
+                default:
+                    table = 'submissions';
+                    type = 'other';
+            }
+
+            // 准备提交数据
+            let submitData;
+            if (pageName === 'main-annotate.html' || pageName === 'main-annotate-complete') {
+                // 验证image_name是否存在
+                if (!data.image_name) {
+                    console.error('提交失败：image_name 不能为空');
+                    return false;
+                }
+
+                // 标注数据特殊处理
+                submitData = {
+                    content: JSON.stringify({
+                        image: data.image_name,
+                        annotations: {
+                            feedback: data.feedback,
+                            rectangles: data.rectangles || []
+                        }
+                    }),
+                    page: pageName
+                };
+
+                console.log('准备发送的标注数据:', {
+                    image: data.image_name,
+                    annotations: {
+                        feedback: data.feedback,
+                        rectangles: (data.rectangles || []).length + '个标注区域'
+                    }
+                });
+            } else if (pageName === 'tool-verify.html') {
+                // 工具验证页面特殊处理
+                submitData = {
+                    content: JSON.stringify({
+                        image: data.image,
+                        answers: data.answers,
+                        timestamp: new Date().toISOString()
+                    }),
+                    page: pageName
+                };
+                
+                // 如果提交失败，保存到本地
+                const backupData = {
+                    image: data.image,
+                    answers: data.answers,
+                    timestamp: new Date().toISOString()
+                };
+                
+                try {
+                    let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
+                    savedAnswers.push(backupData);
+                    localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));
+                } catch (e) {
+                    console.error('备份数据保存失败:', e);
+                }
+            } else {
+                submitData = {
+                    content: JSON.stringify(data),
+                    table: table,
+                    type: type,
+                    page: pageName,
+                    timestamp: new Date().toISOString()
+                };
+            }
+
+            // 调试模式：只打印不提交
+            if (localStorage.getItem('debugMode') === 'true') {
+                console.log('调试模式 - 提交数据:', {
+                    url: 'http://10.178.195.192:5000/submit',
+                    method: 'POST',
+                    headers: headers,
+                    data: submitData,
+                    page: pageName
+                });
+                return true;
+            }
+
+            const response = await fetch('http://10.178.195.192:5000/submit', {
                 method: 'POST',
                 headers: headers,
-                body: JSON.stringify({
-                    content: JSON.stringify(data),
-                    page: pageName || window.location.pathname
-                })
+                body: JSON.stringify(submitData)
             });
 
+            console.log('服务器响应状态:', response.status);
             const result = await response.json();
+            console.log('服务器响应:', result);
+
             if (result.status === 'success') {
                 // 如果是新用户，保存服务器分配的ID
                 if (result.user_id && !userId) {
@@ -37,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 return true;
             } else {
-                console.error('提交失败');
+                console.error('提交失败:', result.message);
                 return false;
             }
         } catch (error) {
@@ -46,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 知情同意页面逻辑 (consent.html)
+    // 知情同意页面逻辑
     const consentCheck = document.getElementById('consent-check');
     const consentButton = document.getElementById('consent-button');
     
@@ -61,56 +167,135 @@ document.addEventListener('DOMContentLoaded', function() {
             if (consentCheck.checked) {
                 // 将同意状态保存到 localStorage
                 localStorage.setItem('consentGiven', 'true');
+                
                 // 保存同意记录到服务器
-                await submitToServer({
+                const success = await submitToServer({
                     action: 'consent',
+                    status: 'agreed',
                     timestamp: new Date().toISOString()
-                }, 'consent.html');
-                // 跳转到内容页面
-                window.location.href = 'content.html';
+                }, 'index.html');
+                
+                if (success) {
+                    // 重置页面状态，确保从第一页开始
+                    localStorage.removeItem('page1_completed');
+                    localStorage.removeItem('page2_completed');
+                    localStorage.removeItem('page3_completed');
+                    // 跳转到内容页面
+                    window.location.href = 'content.html';
+                } else {
+                    alert('提交失败，请重试');
+                }
             }
         });
     }
 
-    // 多页问卷逻辑
-    const page1 = document.getElementById('page1');
+    // content.html 多页面逻辑
+    const page1Form = document.getElementById('page1');
     const page2 = document.getElementById('page2');
     const page3 = document.getElementById('page3');
+
+    if (page1Form && page2 && page3) {
+        // 第1页：基本信息提交
+        page1Form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const age = document.querySelector('select[name="age"]').value;
+            const gender = document.querySelector('select[name="gender"]').value;
+            const major = document.querySelector('input[name="major"]').value;
+            
+            if (!age || !gender || !major) {
+                alert('请填写所有必填项');
+                return;
+            }
+            
+            // 收集表单数据
+            const formData = {
+                age: age,
+                gender: gender,
+                major: major,
+                page: 'page1',
+                timestamp: new Date().toISOString()
+            };
+            
+            // 保存到localStorage
+            localStorage.setItem('basicSurvey', JSON.stringify(formData));
+            
+            // 提交到服务器
+            const success = await submitToServer(formData, 'content.html');
+            if (success) {
+                // 提交成功后记录已完成状态
+                localStorage.setItem('page1_completed', 'true');
+                showPage('page2');
+            } else {
+                alert('提交失败，请重试');
+            }
+        });
+
+        // 第2页：Dark Pattern简介
+        const toPage3Button = document.querySelector('#page2 button');
+        if (toPage3Button) {
+            toPage3Button.addEventListener('click', async function() {
+                // 记录用户已阅读Dark Pattern简介
+                const success = await submitToServer({
+                    action: 'read_intro',
+                    page: 'page2',
+                    timestamp: new Date().toISOString()
+                }, 'content.html');
+
+                if (success) {
+                    localStorage.setItem('page2_completed', 'true');
+                    showPage('page3');
+                } else {
+                    alert('提交失败，请重试');
+                }
+            });
+        }
+
+        // 第3页：Dark Pattern分类描述
+        const toMainTaskButton = document.querySelector('#page3 button');
+        if (toMainTaskButton) {
+            toMainTaskButton.addEventListener('click', async function() {
+                // 记录用户已阅读Dark Pattern分类
+                const success = await submitToServer({
+                    action: 'read_categories',
+                    page: 'page3',
+                    timestamp: new Date().toISOString()
+                }, 'content.html');
+
+                if (success) {
+                    localStorage.setItem('page3_completed', 'true');
+                    window.location.href = 'main-task.html';
+                } else {
+                    alert('提交失败，请重试');
+                }
+            });
+        }
+
+        // 检查页面加载时应该显示哪个页面
+        if (localStorage.getItem('page2_completed')) {
+            showPage('page3');
+        } else if (localStorage.getItem('page1_completed')) {
+            showPage('page2');
+        } else {
+            // 默认显示第一页
+            showPage('page1');
+        }
+    }
+
+    // 多页问卷逻辑
     const toCategory = document.getElementById('toCategory');
     const toMainSurvey = document.getElementById('toMainSurvey');
 
-    if (page1 && page2 && page3) {
+    if (toCategory && toMainSurvey) {
         // 检查是否已经同意
         if (!localStorage.getItem('consentGiven')) {
             window.location.href = 'consent.html';
         }
         // 第1页提交
-        page1.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            // 收集第一页数据
-            const formData = new FormData(page1);
-            const basicData = {};
-            for (let [key, value] of formData.entries()) {
-                basicData[key] = value;
-            }
-            // 保存到localStorage，供后续问卷使用
-            localStorage.setItem('basicSurvey', JSON.stringify(basicData));
-            // 保存到服务器
-            await submitToServer(basicData, 'page1');
-            // 切换到第2页
-            page1.style.display = 'none';
-            page2.style.display = '';
-            page3.style.display = 'none';
-        });
-
-        // 第2页到第3页
         toCategory.addEventListener('click', async function() {
             // 可以保存第2页的状态（如果有表单）
             const page2Data = {}; // 收集第2页数据
             await submitToServer(page2Data, 'page2');
-            page1.style.display = 'none';
-            page2.style.display = 'none';
-            page3.style.display = '';
+            showPage('page2');
         });
 
         // 进入正式问卷
@@ -175,4 +360,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-}); 
+});
+
+// 页面切换函数
+window.showPage = function(pageId) {
+    // 隐藏所有页面
+    document.querySelectorAll('.survey-page').forEach(page => {
+        page.style.display = 'none';
+    });
+    
+    // 显示目标页面
+    document.getElementById(pageId).style.display = 'block';
+    
+    // 滚动到顶部
+    window.scrollTo(0, 0);
+}; 

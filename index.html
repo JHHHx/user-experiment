@@ -29,16 +29,6 @@
             <button id="consent-button" disabled>确定</button>
         </div>
     </div>
-    <script>
-        document.getElementById('consent-check').onchange = function() {
-            document.getElementById('consent-button').disabled = !this.checked;
-        };
-        
-        document.getElementById('consent-button').onclick = function() {
-            if (document.getElementById('consent-check').checked) {
-                window.location.href = 'content.html';
-            }
-        };
-    </script>
+    <script src="script.js"></script>
 </body>
 </html> 

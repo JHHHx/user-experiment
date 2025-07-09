@@ -90,7 +90,7 @@
                     <p>3. 您所学习的专业或者从事的行业是：</p>
                     <input type="text" name="major" placeholder="请输入您的专业或行业" required>
                 </div>
-                <button type="submit" onclick="validateAndNext(event)">下一页</button>
+                <button type="submit">下一页</button>
             </form>
 
             <!-- 第2页：Dark Pattern简介 -->
@@ -193,33 +193,6 @@
             </div>
         </div>
     </div>
-    <script>
-        function validateAndNext(event) {
-            event.preventDefault();
-            const age = document.querySelector('select[name="age"]').value;
-            const gender = document.querySelector('select[name="gender"]').value;
-            const major = document.querySelector('input[name="major"]').value;
-            
-            if (!age || !gender || !major) {
-                alert('请填写所有必填项');
-                return;
-            }
-            
-            showPage('page2');
-        }
-
-        function showPage(pageId) {
-            // 隐藏所有页面
-            document.querySelectorAll('.survey-page').forEach(page => {
-                page.style.display = 'none';
-            });
-            
-            // 显示目标页面
-            document.getElementById(pageId).style.display = 'block';
-            
-            // 滚动到顶部
-            window.scrollTo(0, 0);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html> 
