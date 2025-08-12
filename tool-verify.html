@@ -276,7 +276,7 @@
             padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            width: 270px;
+            width: 380px;
             max-width: calc(100vw - 100px);
             max-height: 80vh;
             overflow-y: auto;
@@ -339,10 +339,11 @@
         }
     </style>
     <script src="disable-back.js"></script>
+    <script src="script.js"></script>
 </head>
 <body>
     <div class="container">
-        <div class="progress-header" id="progress-header">工具验证 第1张（共12张）</div>
+                        <div class="progress-header" id="progress-header">工具验证 第1张（共14张）</div>
         <div class="content-wrapper">
             <!-- 左侧面板 -->
             <div class="left-panel">
@@ -374,12 +375,12 @@
                                         <div class="rating-option"><input type="radio" name="location_value" value="2"><label>2</label></div>
                                         <div class="rating-option"><input type="radio" name="location_value" value="3"><label>3</label></div>
                                         <div class="rating-option"><input type="radio" name="location_value" value="4"><label>4</label></div>
-                                        <div class="rating-option"><input type="radio" name="location_value" value="5"><label>5</label></div>
+                                        <div class="rating-option"><input type="radio" name="location_value" value="5"><label>5(满意)</label></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <img class="tool-img" src="placeholder.jpg" alt="工具结果1">
+                        <img class="tool-img" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuekuuS+i+WbvueJhzwvdGV4dD4KPC9zdmc+" alt="工具结果1">
                     </div>
                 </div>
                 <div class="tool-card">
@@ -396,7 +397,7 @@
                         <div class="dp-popup-trigger red-trigger" id="redTrigger" style="position: absolute; top: 10px; right: 60px; width: 30px; height: 30px; border-radius: 50%; background: #f44336; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">红</div>
                         <!-- 蓝色弹窗触发按钮 -->
                         <div class="dp-popup-trigger blue-trigger" id="blueTrigger" style="position: absolute; top: 10px; right: 100px; width: 30px; height: 30px; border-radius: 50%; background: #2196f3; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">蓝</div>
-                        <img class="tool-img" src="placeholder.jpg" alt="工具结果2">
+                        <img class="tool-img" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuekuuS+i+WbvueJhzwvdGV4dD4KPC9zdmc+" alt="工具结果2">
                     </div>
                 </div>
                 <div class="tool-card">
@@ -413,7 +414,7 @@
                         <div class="dp-popup-trigger red-trigger" id="redDetailTrigger" style="position: absolute; top: 10px; right: 60px; width: 30px; height: 30px; border-radius: 50%; background: #f44336; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">红</div>
                         <!-- 蓝色弹窗触发按钮 -->
                         <div class="dp-popup-trigger blue-trigger" id="blueDetailTrigger" style="position: absolute; top: 10px; right: 100px; width: 30px; height: 30px; border-radius: 50%; background: #2196f3; color: white; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">蓝</div>
-                        <img class="tool-img" src="placeholder.jpg" alt="工具结果3">
+                        <img class="tool-img" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuekuuS+i+WbvueJhzwvdGV4dD4KPC9zdmc+" alt="工具结果3">
                     </div>
                 </div>
                 <div class="no-dp-message" id="no-dp-message">
@@ -437,7 +438,7 @@
         let imgIndex = parseInt(sessionStorage.getItem('imgIndex'));
         
         // 设置进度显示
-        document.getElementById('progress-header').textContent = `工具验证 第${imgIndex + 1}张（共12张）`;
+        document.getElementById('progress-header').textContent = `工具验证 第${imgIndex + 1}张（共14张）`;
         
         // 获取显示图片的元素
         const displayImg = document.getElementById('display-img');
@@ -650,56 +651,32 @@
                     }
                 }
             }
-            // 更新图片索引
-            imgIndex++;
-            if (imgIndex < imgOrder.length) {
-                // 收集并提交当前页面的答案
-                const answers = {};
-                const originalImgName = getCurrentOriginalImageName();
+            // 收集并提交当前页面的答案（无论是否为最后一张图片都要提交）
+            const answers = {};
+            const originalImgName = getCurrentOriginalImageName();
+            
+            if (originalImgName === '隐藏紧迫1.1.jpg') {
+                // 收集双弹窗答案
+                answers.dpAnswers = dpAnswers;
+                answers.detailDpAnswers = detailDpAnswers;
+            } else {
+                // 收集普通问题答案
+                const allRadios = document.querySelectorAll('.question-content input[type="radio"]:checked');
+                allRadios.forEach(radio => {
+                    answers[radio.name] = radio.value;
+                });
+            }
+            
+            // 提交答案到服务器
+            try {
+                const submitSuccess = await window.submitToServer({
+                    image: originalImgName,
+                    answers: answers,
+                    timestamp: new Date().toISOString()
+                }, 'tool-verify.html');
                 
-                if (originalImgName === '隐藏紧迫1.1.jpg') {
-                    // 收集双弹窗答案
-                    answers.dpAnswers = dpAnswers;
-                    answers.detailDpAnswers = detailDpAnswers;
-                } else {
-                    // 收集普通问题答案
-                    const allRadios = document.querySelectorAll('.question-content input[type="radio"]:checked');
-                    allRadios.forEach(radio => {
-                        answers[radio.name] = radio.value;
-                    });
-                }
-                
-                // 提交答案到服务器
-                try {
-                    const response = await fetch('http://localhost:5000/submit', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            content: JSON.stringify({
-                                image: originalImgName,
-                                answers: answers,
-                                timestamp: new Date().toISOString()
-                            }),
-                            page: 'tool-verify.html'
-                        })
-                    });
-                    
-                    const result = await response.json();
-                    if (result.status !== 'success') {
-                        console.error('答案提交失败');
-                        // 保存到localStorage作为备份
-                        let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
-                        savedAnswers.push({
-                            image: originalImgName,
-                            answers: answers,
-                            timestamp: new Date().toISOString()
-                        });
-                        localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));
-                    }
-                } catch (error) {
-                    console.error('提交错误：', error);
+                if (!submitSuccess) {
+                    console.error('答案提交失败');
                     // 保存到localStorage作为备份
                     let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
                     savedAnswers.push({
@@ -709,13 +686,27 @@
                     });
                     localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));
                 }
-                
+            } catch (error) {
+                console.error('提交错误：', error);
+                // 保存到localStorage作为备份
+                let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
+                savedAnswers.push({
+                    image: originalImgName,
+                    answers: answers,
+                    timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));
+            }
+            
+            // 更新图片索引
+            imgIndex++;
+            if (imgIndex < imgOrder.length) {
                 sessionStorage.removeItem('annotations');
                 sessionStorage.setItem('imgIndex', imgIndex.toString());
                 window.location.href = 'main-annotate.html';
             } else {
-                alert('恭喜您完成了所有图片的标注!');
-                // window.location.href = 'end.html';
+                // 跳转到问卷页面
+                window.location.href = 'end.html';
             }
         };
         
@@ -981,17 +972,36 @@
         let questionData = null;
         async function loadQuestionData() {
             if (questionData) return questionData;
-            try {
-                const res = await fetch('question.json');
-                if (!res.ok) {
-                    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            
+            const maxRetries = 3;
+            let retryCount = 0;
+            
+            const tryLoadData = async () => {
+                try {
+                    const res = await fetch('question.json');
+                    if (!res.ok) {
+                        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+                    }
+                    questionData = await res.json();
+                    console.log('成功加载问题数据:', questionData);
+                    return questionData;
+                } catch (error) {
+                    console.error(`加载问题数据失败 (第${retryCount + 1}次):`, error.message);
+                    
+                    if (retryCount < maxRetries - 1) {
+                        retryCount++;
+                        console.log(`将在1秒后重试...`);
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        return tryLoadData();
+                    } else {
+                        console.error('问题数据加载最终失败');
+                        alert('加载问题数据失败: ' + error.message + '\n请刷新页面重试');
+                        return [];
+                    }
                 }
-                questionData = await res.json();
-                return questionData;
-            } catch (error) {
-                alert('加载问题数据失败: ' + error.message);
-                return [];
-            }
+            };
+            
+            return tryLoadData();
         }
 
         // 根据图片名获取问题数组
@@ -1072,58 +1082,79 @@
 
         // 渲染界面暗黑模式基本信息卡片的问题弹窗
         async function renderBasicInfoQuestions(imgName, dpType = null) {
-            await loadQuestionData();
+            //console.log('开始渲染基本信息问题:', imgName, dpType);
             
-            if (imgName === '隐藏紧迫1.1.jpg') {
-                // 为隐藏紧迫1.1.jpg创建双弹窗
-                await createDualPopups(imgName);
-                return;
-            }
-            
-            // 为其他图片创建普通弹窗
-            const questions = getQuestionsByImg(imgName, dpType);
-            
-            const popup = document.querySelectorAll('.tool-card')[1].querySelector('.question-content');
-            if (!popup) {
-                return;
-            }
-            
-            popup.innerHTML = '';
-            
-            if (questions.length === 0) {
-                popup.innerHTML = '<div style="text-align: center; color: #666;">暂无问题数据</div>';
-                return;
-            }
-            
-            questions.forEach((q, idx) => {
-                if (idx > 0) popup.innerHTML += '<hr style="margin: 1rem 0;">';
-                popup.innerHTML += `
-                    <div class="question-item">
-                        <div class="question-text" style="font-weight: bold; margin-bottom: 0.5rem;">${q}</div>
-                    </div>
-                    <div class="question-item" style="margin-bottom:0.5rem;">
-                        <div class="question-text" style="flex:0 0 3.5em;">准确</div>
-                        <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${q}_accuracy' value='${i}'><label>${i}</label></div>`).join('')}
+            try {
+                await loadQuestionData();
+                
+                if (imgName === '隐藏紧迫1.1.jpg') {
+                    // 为隐藏紧迫1.1.jpg创建双弹窗
+                    //console.log('为隐藏紧迫1.1.jpg创建双弹窗');
+                    await createDualPopups(imgName);
+                    return;
+                }
+                
+                // 为其他图片创建普通弹窗
+                const questions = getQuestionsByImg(imgName, dpType);
+                //console.log('获取到的问题:', questions);
+                
+                const toolCards = document.querySelectorAll('.tool-card');
+                //console.log('找到的tool-card数量:', toolCards.length);
+                
+                if (toolCards.length < 2) {
+                    console.error('找不到第二个tool-card元素');
+                    return;
+                }
+                
+                const popup = toolCards[1].querySelector('.question-content');
+                if (!popup) {
+                    console.error('找不到question-content元素');
+                    return;
+                }
+                
+                popup.innerHTML = '';
+                
+                if (questions.length === 0) {
+                    //console.log('没有找到问题数据');
+                    popup.innerHTML = '<div style="text-align: center; color: #666;">暂无问题数据</div>';
+                    return;
+                }
+                
+                //console.log('开始生成问题HTML');
+                questions.forEach((q, idx) => {
+                    if (idx > 0) popup.innerHTML += '<hr style="margin: 1rem 0;">';
+                    popup.innerHTML += `
+                        <div class="question-item">
+                            <div class="question-text" style="font-weight: bold; margin-bottom: 0.5rem;">${q}</div>
                         </div>
-                    </div>
-                    <div class="question-item" style="margin-bottom:0.5rem;">
-                        <div class="question-text" style="flex:0 0 3.5em;">有用</div>
-                        <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${q}_useful' value='${i}'><label>${i}</label></div>`).join('')}
+                        <div class="question-item" style="margin-bottom:0.5rem;">
+                            <div class="question-text" style="flex:0 0 3.5em;">准确</div>
+                            <div class="rating-options">
+                                ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${q}_accuracy' value='${i}'><label>${i}${i === 5 ? '（满意）' : ''}</label></div>`).join('')}
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
+                        <div class="question-item" style="margin-bottom:0.5rem;">
+                            <div class="question-text" style="flex:0 0 3.5em;">有用</div>
+                            <div class="rating-options">
+                                ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${q}_useful' value='${i}'><label>${i}${i === 5 ? '（满意）' : ''}</label></div>`).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                //console.log('基本信息问题渲染完成');
+            } catch (error) {
+                console.error('渲染基本信息问题时出错:', error);
+            }
         }
 
         // 渲染界面暗黑模式详细信息卡片的问题弹窗
         async function renderDetailInfoQuestions(imgName, dpType = null) {
-            console.log('开始渲染详细信息问题:', imgName, dpType);
+            //console.log('开始渲染详细信息问题:', imgName, dpType);
             await loadQuestionData();
             
             if (imgName === '隐藏紧迫1.1.jpg') {
-                console.log('处理隐藏紧迫1.1.jpg的详细信息问题');
+                //console.log('处理隐藏紧迫1.1.jpg的详细信息问题');
                 // 为隐藏紧迫1.1.jpg创建双弹窗
                 await createDetailDualPopups(imgName);
                 return;
@@ -1131,23 +1162,23 @@
             
             // 为其他图片创建普通弹窗
             const questions = getDetailQuestionsByImg(imgName, dpType);
-            console.log('获取到的详细信息问题:', questions);
+            //console.log('获取到的详细信息问题:', questions);
             
             const popup = document.getElementById('detail-info-questions');
             if (!popup) {
-                console.log('未找到详细信息问题容器');
+                //console.log('未找到详细信息问题容器');
                 return;
             }
             
             popup.innerHTML = '';
             
             if (questions.length === 0) {
-                console.log('没有详细信息问题数据');
+                //console.log('没有详细信息问题数据');
                 popup.innerHTML = '<div style="text-align: center; color: #666;">暂无问题数据</div>';
                 return;
             }
             
-            console.log('开始生成详细信息问题HTML');
+            //console.log('开始生成详细信息问题HTML');
             questions.forEach((q, idx) => {
                 if (idx > 0) popup.innerHTML += '<hr style="margin: 1rem 0;">';
                 popup.innerHTML += `
@@ -1157,18 +1188,18 @@
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">准确</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${q}_accuracy' value='${i}'><label>${i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">有用</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${q}_useful' value='${i}'><label>${i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${q}_useful' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                 `;
             });
-            console.log('详细信息问题HTML生成完成');
+            //console.log('详细信息问题HTML生成完成');
         }
 
         // 创建双弹窗（红蓝切换）
@@ -1244,13 +1275,13 @@
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">准确</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${type}_${q}_accuracy' value='${i}'><label>${i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${type}_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">有用</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${type}_${q}_useful' value='${i}'><label>${i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${type}_${q}_useful' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1327,13 +1358,13 @@
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">准确</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${type}_${q}_accuracy' value='${i}'><label>${i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${type}_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">有用</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${type}_${q}_useful' value='${i}'><label>${i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${type}_${q}_useful' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1678,12 +1709,26 @@
             // 先加载question.json数据
             await loadQuestionData();
             
-            // 等待页面元素加载完成后再渲染问题
-            setTimeout(async () => {
+            // 使用更可靠的方式等待页面元素加载完成
+            const maxRetries = 5;
+            let retryCount = 0;
+            
+            const tryRenderQuestions = async () => {
                 const originalImgName = getCurrentOriginalImageName();
                 console.log('当前图片名称:', originalImgName);
                 
                 if (originalImgName) {
+                    // 检查必要的DOM元素是否存在
+                    const toolCards = document.querySelectorAll('.tool-card');
+                    const questionContent = toolCards[1]?.querySelector('.question-content');
+                    
+                    if (!questionContent && retryCount < maxRetries) {
+                        console.log(`DOM元素未准备好，重试第${retryCount + 1}次`);
+                        retryCount++;
+                        setTimeout(tryRenderQuestions, 500);
+                        return;
+                    }
+                    
                     if (originalImgName === '隐藏紧迫1.1.jpg') {
                         // 对于隐藏紧迫1.1.jpg，传递dpType参数
                         const dpType = getCurrentDpType();
@@ -1700,6 +1745,7 @@
                         await renderBasicInfoQuestions(originalImgName);
                         await renderDetailInfoQuestions(originalImgName);
                     }
+                    
                     // 设置双弹窗触发按钮
                     setupDpPopupTriggers();
                     
@@ -1721,8 +1767,15 @@
                             });
                         }
                     });
+                } else if (retryCount < maxRetries) {
+                    console.log(`图片名称未获取到，重试第${retryCount + 1}次`);
+                    retryCount++;
+                    setTimeout(tryRenderQuestions, 300);
                 }
-            }, 1000);
+            };
+            
+            // 开始尝试渲染问题
+            tryRenderQuestions();
         });
     </script>
 </body>

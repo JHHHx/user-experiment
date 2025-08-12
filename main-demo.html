@@ -40,7 +40,7 @@
         }
         .demo-img {
             width: auto;
-            height: 500px;
+            height: 400px;
             object-fit: contain;
             border-radius: 8px;
             margin-bottom: 0.5rem;
@@ -74,16 +74,18 @@
         <h1>工具标注展示样例</h1>
         <div class="survey-box demo-section">
             <div class="demo-desc">
-                <b>以下是使用我们的工具对同一图片标注的展示：<br>
-                1：在对图片进行DP框选后会在其右下角放置DP按钮，即图片1中红色的DP。<br>
-                2：点击后出现该DP基本信息及提示如图2。<br>
-                3：点击右下角详细信息后出现关于DP的详细信息如图3。</b>
+                以下是使用我们的工具对同一图片标注的展示：<br>
+                1：在对图片进行暗黑模式框选后会在其右下角放置DP按钮，即图片1中红色的DP。<br>
+                2：点击后出现该暗黑模式基本信息及提示如图2。<br>
+                3：点击右下角详细信息后出现关于DP的详细信息如图3。<br>
+                4：点击回答问题后会出现图4弹窗（可以自由拖动，答案自动保存）。<br>
+                （在正式环节，图片中的以上内容由AI自动生成，不一定正确，请仔细甄别）<br>
+                <span style="display: inline-block; width: 1.4em;"></span>
+                打分说明：准确->图中该项内容给出的信息您认为是准确的；<br>
+                <span style="display: inline-block; width: 6.4em;"></span>
+                有用->图中该项内容对于帮助您做出您认为正确的决策是有用的。
             </div>
             <div class="demo-img-grid">
-                <div class="demo-img-box">
-                    <img src="example_image/image1.jpg" alt="原图" class="demo-img">
-                    <div class="demo-label">原图</div>
-                </div>
                 <div class="demo-img-box">
                     <img src="example_image/图片1.jpg" alt="样例图片1" class="demo-img">
                     <div class="demo-label">图片1：右下角红色dp按钮</div>
@@ -95,6 +97,10 @@
                 <div class="demo-img-box">
                     <img src="example_image/图片3.jpg" alt="样例图片3" class="demo-img">
                     <div class="demo-label">图片3：点击详细信息后显示详细内容</div>
+                </div>
+                <div class="demo-img-box">
+                    <img src="example_image/问题.jpg" alt="样例图片4" class="demo-img">
+                    <div class="demo-label">图片3：问题回答说明</div>
                 </div>
             </div>
             <button id="demo-next">进入正式问卷</button>

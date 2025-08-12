@@ -58,6 +58,53 @@
             margin-bottom: 0.5rem;
             line-height: 1.5;
         }
+        
+        /* 评分选项样式 */
+        .rating-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 0 20px;
+        }
+
+        .rating-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .rating-option input[type="radio"] {
+            display: none;
+        }
+
+        .rating-option label {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e1e5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .rating-option span {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -99,7 +146,39 @@
                     <h2>什么是Dark Pattern？</h2>
                     <p>Dark Pattern（暗黑模式设计）是指在网站或应用中，设计者故意采用误导性界面或交互方式，引导用户做出非本意的选择，从而达到某些商业目的。例如：难以取消订阅、默认勾选隐私选项、隐藏重要信息等。这些设计可能会影响用户的决策和体验。</p>
                 </div>
-                <button onclick="showPage('page3')">下一页</button>
+                
+                <div class="question">
+                    <h3>在开始本次问卷调查前，请您评价自己对"暗黑模式"（dark pattern）的了解程度？（分数越高越了解）</h3>
+                    <div class="rating-container">
+                        <div class="rating-option">
+                            <input type="radio" name="understanding" value="1" id="understanding1" required>
+                            <label for="understanding1">1</label>
+                            <span>完全不了解</span>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="understanding" value="2" id="understanding2">
+                            <label for="understanding2">2</label>
+                            <span>不太了解</span>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="understanding" value="3" id="understanding3">
+                            <label for="understanding3">3</label>
+                            <span>一般了解</span>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="understanding" value="4" id="understanding4">
+                            <label for="understanding4">4</label>
+                            <span>比较了解</span>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="understanding" value="5" id="understanding5">
+                            <label for="understanding5">5</label>
+                            <span>非常了解</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="submitPage2()">下一页</button>
             </div>
 
             <!-- 第3页：Dark Pattern分类描述 -->

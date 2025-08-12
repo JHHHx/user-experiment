@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户研究问卷</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .question {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .question textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .question textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .rating-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding: 0 20px;
+        }
+
+        .rating-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .rating-option input[type="radio"] {
+            display: none;
+        }
+
+        .rating-option label {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e1e5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+
+        .rating-option input[type="radio"]:checked + label {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .rating-option span {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .success-message {
+            color: #27ae60;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .rating-container {
+                padding: 0 10px;
+            }
+
+            .rating-option label {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>用户研究问卷</h1>
+            <p>感谢您参与本次研究，请认真填写以下问题</p>
+        </div>
+        
+        <div class="content">
+            <form id="surveyForm">
+                <div class="question">
+                    <h3>1. 您认为该自动化工具能否帮助你避免受骗？其对暗黑模式的展示方式是否满意？</h3>
+                    <textarea name="answer1" placeholder="请详细描述您的想法和感受..." required></textarea>
+                </div>
+
+                <div class="question">
+                    <h3>2. 您如何看待所提出的工具？请具体说明其优缺点。</h3>
+                    <textarea name="answer2" placeholder="请详细描述您对该工具的看法，包括其优点和缺点..." required></textarea>
+                </div>
+
+                <div class="question">
+                    <h3>3. 在完成本次问卷调查后，请您评价自己对"暗黑模式"（dark pattern）的了解程度？（分数越高越了解）</h3>
+                    <div class="rating-container">
+                        <div class="rating-option">
+                            <input type="radio" name="answer3" value="1" id="understanding1" required>
+                            <label for="understanding1">1</label>
+                            <span>完全不了解</span>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="answer3" value="2" id="understanding2">
+                            <label for="understanding2">2</label>
+                            <span>不太了解</span>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="answer3" value="3" id="understanding3">
+                            <label for="understanding3">3</label>
+                            <span>一般了解</span>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="answer3" value="4" id="understanding4">
+                            <label for="understanding4">4</label>
+                            <span>比较了解</span>
+                        </div>
+                        <div class="rating-option">
+                            <input type="radio" name="answer3" value="5" id="understanding5">
+                            <label for="understanding5">5</label>
+                            <span>非常了解</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <h3>4. 你对暗黑模式、该工具、本次研究或任何其他方面还有什么其他意见或想法吗？</h3>
+                    <textarea name="answer4" placeholder="请分享您的任何想法、建议或反馈..." required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">提交问卷</button>
+            </form>
+            
+            <div id="message"></div>
+        </div>
+    </div>
+
+    <script>
+        // 禁用浏览器后退功能
+        (function() {
+            history.pushState(null, null, location.href);
+            window.onpopstate = function() {
+                history.go(1);
+            };
+            
+            // 禁用右键菜单
+            document.oncontextmenu = function() {
+                return false;
+            };
+            
+            // 禁用F5刷新
+            document.onkeydown = function(e) {
+                if (e.keyCode === 116) {
+                    return false;
+                }
+            };
+            
+            // 禁用Ctrl+R刷新
+            document.onkeydown = function(e) {
+                if (e.ctrlKey && e.keyCode === 82) {
+                    return false;
+                }
+            };
+        })();
+
+        document.getElementById('surveyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('message');
+            
+            // 禁用提交按钮
+            submitBtn.disabled = true;
+            submitBtn.textContent = '提交中...';
+            
+            // 清除之前的消息
+            messageDiv.innerHTML = '';
+            messageDiv.className = '';
+            
+            try {
+                // 获取表单数据
+                const formData = new FormData(this);
+                const answers = {
+                    answer1: formData.get('answer1'),
+                    answer2: formData.get('answer2'),
+                    answer3: parseInt(formData.get('answer3')),
+                    answer4: formData.get('answer4')
+                };
+                
+                // 验证数据
+                if (!answers.answer1 || !answers.answer2 || !answers.answer3 || !answers.answer4) {
+                    throw new Error('请完整填写所有问题');
+                }
+                
+                // 使用与之前页面一致的提交方式
+                const success = await window.submitToServer({
+                    answers1: JSON.stringify({ text: answers.answer1 }),
+                    answers2: JSON.stringify({ text: answers.answer2 }),
+                    answers3: answers.answer3,
+                    answers4: JSON.stringify({ text: answers.answer4 }),
+                    timestamp: new Date().toISOString()
+                }, 'end.html');
+                
+                if (success) {
+                    messageDiv.innerHTML = '问卷提交成功！感谢您的参与。';
+                    messageDiv.className = 'success-message';
+                    
+                    // 3秒后显示完成页面
+                    setTimeout(() => {
+                        alert('问卷提交完成！感谢您参与本次用户研究。');
+                        // 可以在这里重定向到其他页面或关闭窗口
+                    }, 3000);
+                } else {
+                    throw new Error('提交失败，请重试');
+                }
+                
+            } catch (error) {
+                messageDiv.innerHTML = '提交失败：' + error.message;
+                messageDiv.className = 'error-message';
+                
+                // 重新启用提交按钮
+                submitBtn.disabled = false;
+                submitBtn.textContent = '提交问卷';
+            }
+        });
+        
+        // 添加表单验证
+        const form = document.getElementById('surveyForm');
+        const inputs = form.querySelectorAll('input, textarea');
+        
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const question = this.closest('.question');
+                if (question) {
+                    const textarea = question.querySelector('textarea');
+                    const radioButtons = question.querySelectorAll('input[type="radio"]');
+                    
+                    if (textarea && textarea.value.trim() === '') {
+                        textarea.style.borderColor = '#e74c3c';
+                    } else if (textarea) {
+                        textarea.style.borderColor = '#e1e5e9';
+                    }
+                    
+                    if (radioButtons.length > 0) {
+                        const checked = Array.from(radioButtons).some(radio => radio.checked);
+                        radioButtons.forEach(radio => {
+                            const label = radio.nextElementSibling;
+                            if (!checked) {
+                                label.style.borderColor = '#e74c3c';
+                            } else {
+                                label.style.borderColor = '#667eea';
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

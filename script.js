@@ -46,6 +46,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     table = 'tool_verify_answers';
                     type = 'verification';
                     break;
+                case 'end.html':
+                    table = 'question_ans';
+                    type = 'survey';
+                    break;
+                case 'content-page2':
+                    table = 'question_ans';
+                    type = 'understanding_rating';
+                    break;
                 default:
                     table = 'submissions';
                     type = 'other';
@@ -104,6 +112,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 } catch (e) {
                     console.error('备份数据保存失败:', e);
                 }
+            } else if (pageName === 'end.html') {
+                // 问卷页面特殊处理
+                submitData = {
+                    content: JSON.stringify({
+                        answers1: data.answers1,
+                        answers2: data.answers2,
+                        answers3: data.answers3,
+                        answers4: data.answers4,
+                        timestamp: new Date().toISOString()
+                    }),
+                    page: pageName
+                };
+                
+                // 如果提交失败，保存到本地
+                const backupData = {
+                    answers1: data.answers1,
+                    answers2: data.answers2,
+                    answers3: data.answers3,
+                    answers4: data.answers4,
+                    timestamp: new Date().toISOString()
+                };
+                
+                try {
+                    let savedAnswers = JSON.parse(localStorage.getItem('surveyAnswers') || '[]');
+                    savedAnswers.push(backupData);
+                    localStorage.setItem('surveyAnswers', JSON.stringify(savedAnswers));
+                } catch (e) {
+                    console.error('问卷备份数据保存失败:', e);
+                }
+            } else if (pageName === 'content-page2') {
+                // 第2页了解程度评分特殊处理
+                submitData = {
+                    content: JSON.stringify({
+                        answers5: data.answers5,
+                        timestamp: new Date().toISOString()
+                    }),
+                    page: pageName
+                };
+                
+                // 如果提交失败，保存到本地
+                const backupData = {
+                    answers5: data.answers5,
+                    timestamp: new Date().toISOString()
+                };
+                
+                try {
+                    let savedRatings = JSON.parse(localStorage.getItem('understandingRatings') || '[]');
+                    savedRatings.push(backupData);
+                    localStorage.setItem('understandingRatings', JSON.stringify(savedRatings));
+                } catch (e) {
+                    console.error('了解程度评分备份数据保存失败:', e);
+                }
             } else {
                 submitData = {
                     content: JSON.stringify(data),
@@ -117,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 调试模式：只打印不提交
             if (localStorage.getItem('debugMode') === 'true') {
                 console.log('调试模式 - 提交数据:', {
-                    url: 'http://10.178.195.192:5000/submit',
+                    url: 'http://10.181.106.252:5000/submit',
                     method: 'POST',
                     headers: headers,
                     data: submitData,
@@ -126,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return true;
             }
 
-            const response = await fetch('http://10.178.195.192:5000/submit', {
+            const response = await fetch('http://10.181.106.252:5000/submit', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(submitData)
@@ -230,25 +290,43 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 第2页：Dark Pattern简介
-        const toPage3Button = document.querySelector('#page2 button');
-        if (toPage3Button) {
-            toPage3Button.addEventListener('click', async function() {
-                // 记录用户已阅读Dark Pattern简介
-                const success = await submitToServer({
-                    action: 'read_intro',
-                    page: 'page2',
-                    timestamp: new Date().toISOString()
-                }, 'content.html');
+        // 第2页：Dark Pattern简介 + 了解程度评分
+        window.submitPage2 = async function() {
+            // 获取用户选择的了解程度评分
+            const understandingRating = document.querySelector('input[name="understanding"]:checked');
+            
+            if (!understandingRating) {
+                alert('请选择您对暗黑模式的了解程度');
+                return;
+            }
+            
+            const rating = parseInt(understandingRating.value);
+            
+            // 先保存了解程度评分到question_ans表
+            const ratingSuccess = await submitToServer({
+                answers5: rating,
+                timestamp: new Date().toISOString()
+            }, 'content-page2');
+            
+            if (!ratingSuccess) {
+                alert('评分提交失败，请重试');
+                return;
+            }
+            
+            // 再记录用户已阅读Dark Pattern简介
+            const readSuccess = await submitToServer({
+                action: 'read_intro',
+                page: 'page2',
+                timestamp: new Date().toISOString()
+            }, 'content.html');
 
-                if (success) {
-                    localStorage.setItem('page2_completed', 'true');
-                    showPage('page3');
-                } else {
-                    alert('提交失败，请重试');
-                }
-            });
-        }
+            if (readSuccess) {
+                localStorage.setItem('page2_completed', 'true');
+                showPage('page3');
+            } else {
+                alert('提交失败，请重试');
+            }
+        };
 
         // 第3页：Dark Pattern分类描述
         const toMainTaskButton = document.querySelector('#page3 button');

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .test-btn:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>问卷功能测试</h1>
+        
+        <button class="test-btn" onclick="testSurveySubmission()">测试问卷提交</button>
+        <button class="test-btn" onclick="checkUserId()">检查用户ID</button>
+        <button class="test-btn" onclick="clearStorage()">清除存储</button>
+        
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.style.borderLeftColor = isError ? '#dc3545' : '#28a745';
+            resultDiv.innerHTML = message;
+        }
+
+        function checkUserId() {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                showResult(`当前用户ID: ${userId}`);
+            } else {
+                showResult('未找到用户ID', true);
+            }
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            showResult('存储已清除');
+        }
+
+        async function testSurveySubmission() {
+            try {
+                // 获取或生成用户ID
+                let userId = localStorage.getItem('userId');
+                if (!userId) {
+                    userId = 'test_user_' + Date.now();
+                    localStorage.setItem('userId', userId);
+                }
+
+                showResult('正在提交测试数据...');
+
+                // 使用与 end.html 相同的提交方式
+                const success = await window.submitToServer({
+                    answers1: JSON.stringify({ text: "这是一个测试回答" }),
+                    answers2: JSON.stringify({ text: "这是问题2的测试回答" }),
+                    answers3: 3,
+                    answers4: JSON.stringify({ text: "测试反馈" }),
+                    timestamp: new Date().toISOString()
+                }, 'end.html');
+
+                if (success) {
+                    showResult(`测试成功！用户ID: ${userId}<br>调试模式: true`);
+                } else {
+                    showResult('测试失败：提交返回false', true);
+                }
+
+            } catch (error) {
+                showResult(`测试错误: ${error.message}`, true);
+            }
+        }
+    </script>
+</body>
+</html>
