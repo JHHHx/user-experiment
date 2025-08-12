@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=['*'])
 
 # 调试模式标记
 DEBUG_MODE = False
@@ -233,4 +233,6 @@ def submit():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

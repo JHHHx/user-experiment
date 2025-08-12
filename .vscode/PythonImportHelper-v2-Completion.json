@@ -98,7 +98,7 @@
         "kind": 5,
         "importPath": "back.server",
         "description": "back.server",
-        "peekOfCode": "app = Flask(__name__)\nCORS(app)\n# 调试模式标记\nDEBUG_MODE = False\n# 读取数据库配置\nwith open('db_config.json', 'r', encoding='utf-8') as f:\n    db_config = json.load(f)\ndef get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():",
+        "peekOfCode": "app = Flask(__name__)\nCORS(app, origins=['*'])\n# 调试模式标记\nDEBUG_MODE = False\n# 读取数据库配置\nwith open('db_config.json', 'r', encoding='utf-8') as f:\n    db_config = json.load(f)\ndef get_db_connection():\n    return pymysql.connect(**db_config)\ndef get_or_create_user_id():",
         "detail": "back.server",
         "documentation": {}
     },
