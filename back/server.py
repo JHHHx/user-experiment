@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import pymysql
+import mysql.connector
 import json
 import uuid
 from datetime import datetime
@@ -12,11 +12,25 @@ CORS(app, origins=['*'])
 DEBUG_MODE = False
 
 # 读取数据库配置
-with open('db_config.json', 'r', encoding='utf-8') as f:
-    db_config = json.load(f)
+import os
+
+# 优先使用环境变量，否则使用配置文件
+if os.environ.get('DB_HOST'):
+    # 从环境变量读取数据库配置
+    db_config = {
+        'host': os.environ.get('DB_HOST'),
+        'user': os.environ.get('DB_USER'),
+        'password': os.environ.get('DB_PASSWORD'),
+        'database': os.environ.get('DB_NAME'),
+        'charset': 'utf8mb4'
+    }
+else:
+    # 从配置文件读取
+    with open('db_config.json', 'r', encoding='utf-8') as f:
+        db_config = json.load(f)
 
 def get_db_connection():
-    return pymysql.connect(**db_config)
+    return mysql.connector.connect(**db_config)
 
 def get_or_create_user_id():
     """从请求中获取用户ID，如果不存在则创建新的"""
