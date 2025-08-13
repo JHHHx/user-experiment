@@ -25,9 +25,20 @@ if os.environ.get('DB_HOST'):
         'charset': 'utf8mb4'
     }
 else:
-    # 从配置文件读取
-    with open('db_config.json', 'r', encoding='utf-8') as f:
-        db_config = json.load(f)
+    # 从配置文件读取（如果文件存在）
+    try:
+        with open('db_config.json', 'r', encoding='utf-8') as f:
+            db_config = json.load(f)
+    except FileNotFoundError:
+        # 如果配置文件不存在，使用默认配置
+        print("警告：未找到db_config.json文件，使用默认配置")
+        db_config = {
+            'host': 'localhost',
+            'user': 'root',
+            'password': 'password',
+            'database': 'test',
+            'charset': 'utf8mb4'
+        }
 
 def get_db_connection():
     return mysql.connector.connect(**db_config)
