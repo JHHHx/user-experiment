@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return true;
             }
 
-            const response = await fetch('http://10.181.106.252:5000/submit', {
+            const response = await fetch('https://user-experiment.onrender.com/submit', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(submitData)
