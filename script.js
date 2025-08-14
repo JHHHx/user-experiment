@@ -1,4 +1,65 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 创建全局加载提示
+    window.showLoading = function(message = '加载中...') {
+        // 移除已存在的加载提示
+        const existingLoading = document.getElementById('global-loading');
+        if (existingLoading) {
+            existingLoading.remove();
+        }
+        
+        // 创建加载提示元素
+        const loadingDiv = document.createElement('div');
+        loadingDiv.id = 'global-loading';
+        loadingDiv.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        `;
+        
+        const loadingContent = document.createElement('div');
+        loadingContent.style.cssText = `
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        `;
+        
+        loadingContent.innerHTML = `
+            <div style="margin-bottom: 15px;">
+                <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            </div>
+            <div style="color: #333; font-size: 16px;">${message}</div>
+        `;
+        
+        // 添加旋转动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        loadingDiv.appendChild(loadingContent);
+        document.body.appendChild(loadingDiv);
+    };
+    
+    window.hideLoading = function() {
+        const loadingDiv = document.getElementById('global-loading');
+        if (loadingDiv) {
+            loadingDiv.remove();
+        }
+    };
+
     // 获取或生成用户ID
     window.getUserId = function() {
         let userId = localStorage.getItem('userId');
@@ -9,10 +70,49 @@ document.addEventListener('DOMContentLoaded', function() {
         return userId;
     }
 
+    // 改进的用户ID管理函数
+    window.ensureUserId = async function() {
+        let userId = localStorage.getItem('userId');
+        if (!userId) {
+            // 如果没有用户ID，先尝试从服务器获取或创建
+            try {
+                const response = await fetch('https://user-experiment.onrender.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: JSON.stringify({ action: 'init_user' }),
+                        page: 'user_init'
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.status === 'success' && result.user_id) {
+                    userId = result.user_id;
+                    localStorage.setItem('userId', userId);
+                    // console.log('新用户ID已保存:', userId);
+                }
+            } catch (error) {
+                // console.error('获取用户ID失败:', error);
+                // 如果网络失败，生成临时ID
+                userId = 'temp_user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('userId', userId);
+            }
+        }
+        return userId;
+    }
+
     // 通用提交函数
     window.submitToServer = async function(data, pageName) {
         try {
-            const userId = getUserId();
+            // 显示加载提示
+            if (window.showLoading) {
+                window.showLoading('正在提交数据，请稍候...');
+            }
+            
+            // 确保有用户ID
+            const userId = await window.ensureUserId();
             const headers = {
                 'Content-Type': 'application/json'
             };
@@ -64,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (pageName === 'main-annotate.html' || pageName === 'main-annotate-complete') {
                 // 验证image_name是否存在
                 if (!data.image_name) {
-                    console.error('提交失败：image_name 不能为空');
+                    // console.error('提交失败：image_name 不能为空');
                     return false;
                 }
 
@@ -80,13 +180,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     page: pageName
                 };
 
-                console.log('准备发送的标注数据:', {
-                    image: data.image_name,
-                    annotations: {
-                        feedback: data.feedback,
-                        rectangles: (data.rectangles || []).length + '个标注区域'
-                    }
-                });
+                // console.log('准备发送的标注数据:', {
+                //     image: data.image_name,
+                //     annotations: {
+                //         feedback: data.feedback,
+                //         rectangles: (data.rectangles || []).length + '个标注区域'
+                //     }
+                // });
             } else if (pageName === 'tool-verify.html') {
                 // 工具验证页面特殊处理
                 submitData = {
@@ -98,20 +198,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     page: pageName
                 };
                 
-                // 如果提交失败，保存到本地
-                const backupData = {
-                    image: data.image,
-                    answers: data.answers,
-                    timestamp: new Date().toISOString()
-                };
-                
-                try {
-                    let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
-                    savedAnswers.push(backupData);
-                    localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));
-                } catch (e) {
-                    console.error('备份数据保存失败:', e);
-                }
             } else if (pageName === 'end.html') {
                 // 问卷页面特殊处理
                 submitData = {
@@ -125,24 +211,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     page: pageName
                 };
                 
-                // 如果提交失败，保存到本地
-                const backupData = {
-                    answers1: data.answers1,
-                    answers2: data.answers2,
-                    answers3: data.answers3,
-                    answers4: data.answers4,
-                    timestamp: new Date().toISOString()
-                };
-                
-                try {
-                    let savedAnswers = JSON.parse(localStorage.getItem('surveyAnswers') || '[]');
-                    savedAnswers.push(backupData);
-                    localStorage.setItem('surveyAnswers', JSON.stringify(savedAnswers));
-                } catch (e) {
-                    console.error('问卷备份数据保存失败:', e);
-                }
             } else if (pageName === 'content-page2') {
-                // 第2页了解程度评分特殊处理
+                // 了解程度评分特殊处理
                 submitData = {
                     content: JSON.stringify({
                         answers5: data.answers5,
@@ -151,63 +221,64 @@ document.addEventListener('DOMContentLoaded', function() {
                     page: pageName
                 };
                 
-                // 如果提交失败，保存到本地
-                const backupData = {
-                    answers5: data.answers5,
-                    timestamp: new Date().toISOString()
-                };
-                
-                try {
-                    let savedRatings = JSON.parse(localStorage.getItem('understandingRatings') || '[]');
-                    savedRatings.push(backupData);
-                    localStorage.setItem('understandingRatings', JSON.stringify(savedRatings));
-                } catch (e) {
-                    console.error('了解程度评分备份数据保存失败:', e);
-                }
             } else {
+                // 其他页面的通用处理
                 submitData = {
                     content: JSON.stringify(data),
-                    table: table,
-                    type: type,
-                    page: pageName,
-                    timestamp: new Date().toISOString()
+                    page: pageName
                 };
             }
 
-            // 调试模式：只打印不提交
-            if (localStorage.getItem('debugMode') === 'true') {
-                console.log('调试模式 - 提交数据:', {
-                    url: 'http://10.181.106.252:5000/submit',
-                    method: 'POST',
-                    headers: headers,
-                    data: submitData,
-                    page: pageName
-                });
-                return true;
-            }
+            // 设置超时时间（30秒）
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
 
             const response = await fetch('https://user-experiment.onrender.com/submit', {
                 method: 'POST',
                 headers: headers,
-                body: JSON.stringify(submitData)
+                body: JSON.stringify(submitData),
+                signal: controller.signal
             });
 
-            console.log('服务器响应状态:', response.status);
+            clearTimeout(timeoutId);
+
+            // console.log('服务器响应状态:', response.status);
             const result = await response.json();
-            console.log('服务器响应:', result);
+            // console.log('服务器响应:', result);
 
             if (result.status === 'success') {
                 // 如果是新用户，保存服务器分配的ID
                 if (result.user_id && !userId) {
                     localStorage.setItem('userId', result.user_id);
                 }
+                
+                // 隐藏加载提示
+                if (window.hideLoading) {
+                    window.hideLoading();
+                }
+                
                 return true;
             } else {
-                console.error('提交失败:', result.message);
+                // console.error('提交失败:', result.message);
+                // 隐藏加载提示
+                if (window.hideLoading) {
+                    window.hideLoading();
+                }
                 return false;
             }
         } catch (error) {
-            console.error('提交错误：', error);
+            // console.error('提交错误：', error);
+            
+            // 隐藏加载提示
+            if (window.hideLoading) {
+                window.hideLoading();
+            }
+            
+            // 如果是超时错误，显示特殊提示
+            if (error.name === 'AbortError') {
+                alert('提交超时，请检查网络连接后重试。如果问题持续，请刷新页面。');
+            }
+            
             return false;
         }
     }

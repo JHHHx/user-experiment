@@ -375,7 +375,7 @@
                                         <div class="rating-option"><input type="radio" name="location_value" value="2"><label>2</label></div>
                                         <div class="rating-option"><input type="radio" name="location_value" value="3"><label>3</label></div>
                                         <div class="rating-option"><input type="radio" name="location_value" value="4"><label>4</label></div>
-                                        <div class="rating-option"><input type="radio" name="location_value" value="5"><label>5(满意)</label></div>
+                                        <div class="rating-option"><input type="radio" name="location_value" value="5"><label>5（分数制）</label></div>
                                     </div>
                                 </div>
                             </div>
@@ -676,7 +676,7 @@
                 }, 'tool-verify.html');
                 
                 if (!submitSuccess) {
-                    console.error('答案提交失败');
+                    // console.error('答案提交失败');
                     // 保存到localStorage作为备份
                     let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
                     savedAnswers.push({
@@ -687,7 +687,7 @@
                     localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));
                 }
             } catch (error) {
-                console.error('提交错误：', error);
+                // console.error('提交错误：', error);
                 // 保存到localStorage作为备份
                 let savedAnswers = JSON.parse(localStorage.getItem('toolVerifyAnswers') || '[]');
                 savedAnswers.push({
@@ -810,7 +810,7 @@
                 }
             });
             
-            console.log(`已切换到${type}色场景，并更新了所有状态`);
+            // console.log(`已切换到${type}色场景，并更新了所有状态`);
         }
 
         // 在页面加载完成后初始化
@@ -838,7 +838,7 @@
                     const content = document.querySelector('.question-content[data-qid="' + qid + '"]');
                     
                     if (!content) {
-                        console.error('找不到对应的弹窗内容:', qid);
+                        // console.error('找不到对应的弹窗内容:', qid);
                         return;
                     }
                     
@@ -983,18 +983,18 @@
                         throw new Error(`HTTP ${res.status}: ${res.statusText}`);
                     }
                     questionData = await res.json();
-                    console.log('成功加载问题数据:', questionData);
+                    // console.log('成功加载问题数据:', questionData);
                     return questionData;
                 } catch (error) {
-                    console.error(`加载问题数据失败 (第${retryCount + 1}次):`, error.message);
+                    // console.error(`加载问题数据失败 (第${retryCount + 1}次):`, error.message);
                     
                     if (retryCount < maxRetries - 1) {
                         retryCount++;
-                        console.log(`将在1秒后重试...`);
+                        // console.log(`将在1秒后重试...`);
                         await new Promise(resolve => setTimeout(resolve, 1000));
                         return tryLoadData();
                     } else {
-                        console.error('问题数据加载最终失败');
+                        // console.error('问题数据加载最终失败');
                         alert('加载问题数据失败: ' + error.message + '\n请刷新页面重试');
                         return [];
                     }
@@ -1033,38 +1033,38 @@
 
         // 根据图片名获取详细信息问题数组（使用question_name1）
         function getDetailQuestionsByImg(imgName, dpType = null) {
-            console.log('获取详细信息问题:', imgName, dpType);
-            console.log('当前问题数据:', questionData);
+            // console.log('获取详细信息问题:', imgName, dpType);
+            // console.log('当前问题数据:', questionData);
             
             if (!questionData) {
-                console.log('问题数据未加载');
+                // console.log('问题数据未加载');
                 return [];
             }
             
             const found = questionData.find(q => q.image === imgName);
-            console.log('找到的问题配置:', found);
+            // console.log('找到的问题配置:', found);
             
             if (!found || !found.question_name1) {
-                console.log('未找到问题或question_name1不存在');
+                // console.log('未找到问题或question_name1不存在');
                 return [];
             }
             
             // 处理隐藏紧迫1.1.jpg的特殊情况（二维数组）
             if (imgName === '隐藏紧迫1.1.jpg' && Array.isArray(found.question_name1[0])) {
-                console.log('处理隐藏紧迫1.1.jpg的特殊情况');
+                // console.log('处理隐藏紧迫1.1.jpg的特殊情况');
                 if (dpType === '红') {
-                    console.log('返回红色问题:', found.question_name1[0]);
+                    // console.log('返回红色问题:', found.question_name1[0]);
                     return found.question_name1[0];
                 } else if (dpType === '蓝') {
-                    console.log('返回蓝色问题:', found.question_name1[1]);
+                    // console.log('返回蓝色问题:', found.question_name1[1]);
                     return found.question_name1[1];
                 } else {
-                    console.log('未指定类型，默认返回红色问题');
+                    // console.log('未指定类型，默认返回红色问题');
                     return found.question_name1[0];
                 }
             }
             
-            console.log('返回普通问题:', found.question_name1);
+            // console.log('返回普通问题:', found.question_name1);
             return found.question_name1;
         }
 
@@ -1102,13 +1102,13 @@
                 //console.log('找到的tool-card数量:', toolCards.length);
                 
                 if (toolCards.length < 2) {
-                    console.error('找不到第二个tool-card元素');
+                    // console.error('找不到第二个tool-card元素');
                     return;
                 }
                 
                 const popup = toolCards[1].querySelector('.question-content');
                 if (!popup) {
-                    console.error('找不到question-content元素');
+                    // console.error('找不到question-content元素');
                     return;
                 }
                 
@@ -1130,13 +1130,13 @@
                         <div class="question-item" style="margin-bottom:0.5rem;">
                             <div class="question-text" style="flex:0 0 3.5em;">准确</div>
                             <div class="rating-options">
-                                ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${q}_accuracy' value='${i}'><label>${i}${i === 5 ? '（满意）' : ''}</label></div>`).join('')}
+                                ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${q}_accuracy' value='${i}'><label>${i}${i === 5 ? '（分数制）' : ''}</label></div>`).join('')}
                             </div>
                         </div>
                         <div class="question-item" style="margin-bottom:0.5rem;">
                             <div class="question-text" style="flex:0 0 3.5em;">有用</div>
                             <div class="rating-options">
-                                ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${q}_useful' value='${i}'><label>${i}${i === 5 ? '（满意）' : ''}</label></div>`).join('')}
+                                ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${q}_useful' value='${i}'><label>${i}${i === 5 ? '（分数制）' : ''}</label></div>`).join('')}
                             </div>
                         </div>
                     `;
@@ -1144,7 +1144,7 @@
                 
                 //console.log('基本信息问题渲染完成');
             } catch (error) {
-                console.error('渲染基本信息问题时出错:', error);
+                // console.error('渲染基本信息问题时出错:', error);
             }
         }
 
@@ -1188,13 +1188,13 @@
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">准确</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（分数制）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">有用</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${q}_useful' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${q}_useful' value='${i}'><label>${i === 5 ? '5（分数制）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1275,13 +1275,13 @@
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">准确</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${type}_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${type}_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（分数制）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">有用</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${type}_${q}_useful' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='${type}_${q}_useful' value='${i}'><label>${i === 5 ? '5（分数制）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1358,13 +1358,13 @@
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">准确</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${type}_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${type}_${q}_accuracy' value='${i}'><label>${i === 5 ? '5（分数制）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                     <div class="question-item" style="margin-bottom:0.5rem;">
                         <div class="question-text" style="flex:0 0 3.5em;">有用</div>
                         <div class="rating-options">
-                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${type}_${q}_useful' value='${i}'><label>${i === 5 ? '5（满意）' : i}</label></div>`).join('')}
+                            ${[1,2,3,4,5].map(i=>`<div class='rating-option'><input type='radio' name='detail_${type}_${q}_useful' value='${i}'><label>${i === 5 ? '5（分数制）' : i}</label></div>`).join('')}
                         </div>
                     </div>
                 `;
@@ -1672,7 +1672,7 @@
 
         // 更新详细信息触发按钮的可点击状态
         function updateDetailTriggerClickability() {
-            console.log('更新详细信息触发按钮状态');
+            // console.log('更新详细信息触发按钮状态');
             const currentType = getCurrentDpType();
             const redDetailTrigger = document.getElementById('redDetailTrigger');
             const blueDetailTrigger = document.getElementById('blueDetailTrigger');
@@ -1682,7 +1682,7 @@
                     redDetailTrigger.style.opacity = '1';
                     redDetailTrigger.style.pointerEvents = 'auto';
                     redDetailTrigger.style.cursor = 'pointer';
-                    console.log('红色详细信息按钮已启用');
+                    // console.log('红色详细信息按钮已启用');
                 } else {
                     redDetailTrigger.style.opacity = '0.5';
                     redDetailTrigger.style.pointerEvents = 'none';
@@ -1695,7 +1695,7 @@
                     blueDetailTrigger.style.opacity = '1';
                     blueDetailTrigger.style.pointerEvents = 'auto';
                     blueDetailTrigger.style.cursor = 'pointer';
-                    console.log('蓝色详细信息按钮已启用');
+                    // console.log('蓝色详细信息按钮已启用');
                 } else {
                     blueDetailTrigger.style.opacity = '0.5';
                     blueDetailTrigger.style.pointerEvents = 'none';
@@ -1715,7 +1715,7 @@
             
             const tryRenderQuestions = async () => {
                 const originalImgName = getCurrentOriginalImageName();
-                console.log('当前图片名称:', originalImgName);
+                // console.log('当前图片名称:', originalImgName);
                 
                 if (originalImgName) {
                     // 检查必要的DOM元素是否存在
@@ -1723,7 +1723,7 @@
                     const questionContent = toolCards[1]?.querySelector('.question-content');
                     
                     if (!questionContent && retryCount < maxRetries) {
-                        console.log(`DOM元素未准备好，重试第${retryCount + 1}次`);
+                        // console.log(`DOM元素未准备好，重试第${retryCount + 1}次`);
                         retryCount++;
                         setTimeout(tryRenderQuestions, 500);
                         return;
@@ -1732,14 +1732,14 @@
                     if (originalImgName === '隐藏紧迫1.1.jpg') {
                         // 对于隐藏紧迫1.1.jpg，传递dpType参数
                         const dpType = getCurrentDpType();
-                        console.log('当前DP类型:', dpType);
+                        // console.log('当前DP类型:', dpType);
                         
                         // 渲染基本信息问题
                         await renderBasicInfoQuestions(originalImgName, dpType);
                         
                         // 渲染详细信息问题
                         await renderDetailInfoQuestions(originalImgName, dpType);
-                        console.log('已尝试渲染详细信息问题');
+                        // console.log('已尝试渲染详细信息问题');
                     } else {
                         // 对于其他图片，不传递dpType参数
                         await renderBasicInfoQuestions(originalImgName);
@@ -1768,7 +1768,7 @@
                         }
                     });
                 } else if (retryCount < maxRetries) {
-                    console.log(`图片名称未获取到，重试第${retryCount + 1}次`);
+                    // console.log(`图片名称未获取到，重试第${retryCount + 1}次`);
                     retryCount++;
                     setTimeout(tryRenderQuestions, 300);
                 }

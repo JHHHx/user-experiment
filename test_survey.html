@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>问卷测试页面</title>
+    <title>系统功能测试页面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 800px;
             margin: 50px auto;
             padding: 20px;
             background: #f5f5f5;
@@ -22,6 +22,12 @@
             color: #333;
             text-align: center;
         }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
         .test-btn {
             background: #007bff;
             color: white;
@@ -29,84 +35,180 @@
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            margin: 10px;
+            margin: 5px;
         }
         .test-btn:hover {
             background: #0056b3;
         }
+        .test-btn.danger {
+            background: #dc3545;
+        }
+        .test-btn.danger:hover {
+            background: #c82333;
+        }
         .result {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 10px;
+            padding: 10px;
             border-radius: 5px;
             background: #f8f9fa;
             border-left: 4px solid #007bff;
+        }
+        .result.error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .result.success {
+            border-left-color: #28a745;
+            background: #d4edda;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>问卷功能测试</h1>
+        <h1>系统功能测试</h1>
         
-        <button class="test-btn" onclick="testSurveySubmission()">测试问卷提交</button>
-        <button class="test-btn" onclick="checkUserId()">检查用户ID</button>
-        <button class="test-btn" onclick="clearStorage()">清除存储</button>
+        <div class="test-section">
+            <h3>1. 加载提示测试</h3>
+            <button class="test-btn" onclick="testLoading()">测试加载提示</button>
+            <button class="test-btn" onclick="testLoadingWithMessage()">测试自定义消息</button>
+            <div id="loading-result" class="result" style="display: none;"></div>
+        </div>
         
-        <div id="result" class="result" style="display: none;"></div>
+        <div class="test-section">
+            <h3>2. 用户ID管理测试</h3>
+            <button class="test-btn" onclick="checkUserId()">检查当前用户ID</button>
+            <button class="test-btn" onclick="testEnsureUserId()">测试用户ID确保功能</button>
+            <button class="test-btn danger" onclick="clearStorage()">清除存储</button>
+            <div id="userid-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. 数据提交测试</h3>
+            <button class="test-btn" onclick="testSurveySubmission()">测试问卷提交</button>
+            <button class="test-btn" onclick="testTimeout()">测试超时处理</button>
+            <div id="submit-result" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. 系统状态</h3>
+            <button class="test-btn" onclick="checkSystemStatus()">检查系统状态</button>
+            <div id="status-result" class="result" style="display: none;"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
     <script>
-        function showResult(message, isError = false) {
-            const resultDiv = document.getElementById('result');
+        function showResult(elementId, message, type = 'info') {
+            const resultDiv = document.getElementById(elementId);
             resultDiv.style.display = 'block';
-            resultDiv.style.borderLeftColor = isError ? '#dc3545' : '#28a745';
+            resultDiv.className = `result ${type}`;
             resultDiv.innerHTML = message;
+        }
+
+        function testLoading() {
+            showResult('loading-result', '显示加载提示3秒...', 'info');
+            window.showLoading();
+            setTimeout(() => {
+                window.hideLoading();
+                showResult('loading-result', '加载提示测试完成！', 'success');
+            }, 3000);
+        }
+
+        function testLoadingWithMessage() {
+            showResult('loading-result', '显示自定义加载提示...', 'info');
+            window.showLoading('正在处理数据，请稍候...');
+            setTimeout(() => {
+                window.hideLoading();
+                showResult('loading-result', '自定义加载提示测试完成！', 'success');
+            }, 2000);
         }
 
         function checkUserId() {
             const userId = localStorage.getItem('userId');
             if (userId) {
-                showResult(`当前用户ID: ${userId}`);
+                showResult('userid-result', `当前用户ID: ${userId}`, 'success');
             } else {
-                showResult('未找到用户ID', true);
+                showResult('userid-result', '未找到用户ID', 'error');
+            }
+        }
+
+        async function testEnsureUserId() {
+            showResult('userid-result', '正在测试用户ID确保功能...', 'info');
+            try {
+                const userId = await window.ensureUserId();
+                showResult('userid-result', `用户ID确保功能正常，ID: ${userId}`, 'success');
+            } catch (error) {
+                showResult('userid-result', `用户ID确保功能测试失败: ${error.message}`, 'error');
             }
         }
 
         function clearStorage() {
             localStorage.clear();
             sessionStorage.clear();
-            showResult('存储已清除');
+            showResult('userid-result', '存储已清除', 'success');
         }
 
         async function testSurveySubmission() {
+            showResult('submit-result', '正在测试问卷提交...', 'info');
             try {
-                // 获取或生成用户ID
-                let userId = localStorage.getItem('userId');
-                if (!userId) {
-                    userId = 'test_user_' + Date.now();
-                    localStorage.setItem('userId', userId);
-                }
-
-                showResult('正在提交测试数据...');
-
-                // 使用与 end.html 相同的提交方式
                 const success = await window.submitToServer({
-                    answers1: JSON.stringify({ text: "这是一个测试回答" }),
-                    answers2: JSON.stringify({ text: "这是问题2的测试回答" }),
-                    answers3: 3,
+                    answers1: JSON.stringify({ text: "测试回答1" }),
+                    answers2: JSON.stringify({ text: "测试回答2" }),
+                    answers3: 4,
                     answers4: JSON.stringify({ text: "测试反馈" }),
                     timestamp: new Date().toISOString()
                 }, 'end.html');
 
                 if (success) {
-                    showResult(`测试成功！用户ID: ${userId}<br>调试模式: true`);
+                    showResult('submit-result', '问卷提交测试成功！', 'success');
                 } else {
-                    showResult('测试失败：提交返回false', true);
+                    showResult('submit-result', '问卷提交测试失败：提交返回false', 'error');
                 }
-
             } catch (error) {
-                showResult(`测试错误: ${error.message}`, true);
+                showResult('submit-result', `问卷提交测试错误: ${error.message}`, 'error');
             }
+        }
+
+        function testTimeout() {
+            showResult('submit-result', '正在测试超时处理（模拟30秒超时）...', 'info');
+            // 模拟一个会超时的请求
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 1000); // 1秒超时用于测试
+            
+            fetch('https://httpbin.org/delay/10', { signal: controller.signal })
+                .then(response => response.json())
+                .then(data => {
+                    clearTimeout(timeoutId);
+                    showResult('submit-result', '请求成功（不应该发生）', 'error');
+                })
+                .catch(error => {
+                    clearTimeout(timeoutId);
+                    if (error.name === 'AbortError') {
+                        showResult('submit-result', '超时处理测试成功！请求被正确取消', 'success');
+                    } else {
+                        showResult('submit-result', `其他错误: ${error.message}`, 'error');
+                    }
+                });
+        }
+
+        function checkSystemStatus() {
+            const status = {
+                '加载提示功能': typeof window.showLoading === 'function',
+                '用户ID确保功能': typeof window.ensureUserId === 'function',
+                '提交功能': typeof window.submitToServer === 'function',
+                'localStorage可用': typeof localStorage !== 'undefined',
+                'fetch API可用': typeof fetch !== 'undefined',
+                'AbortController可用': typeof AbortController !== 'undefined'
+            };
+            
+            let statusHtml = '<h4>系统功能状态：</h4>';
+            for (const [feature, available] of Object.entries(status)) {
+                const statusText = available ? '✅ 可用' : '❌ 不可用';
+                const statusClass = available ? 'success' : 'error';
+                statusHtml += `<div class="${statusClass}">${feature}: ${statusText}</div>`;
+            }
+            
+            showResult('status-result', statusHtml, 'info');
         }
     </script>
 </body>

@@ -213,12 +213,12 @@
             // 确保图片加载后再调整canvas
             mainImg.onload = function() {
                 setTimeout(resizeCanvas, 100);
-                console.log('图片加载完成：', imgOrder[imgIndex]); // 添加调试日志
+                // console.log('图片加载完成：', imgOrder[imgIndex]); // 添加调试日志
             };
             
             // 添加错误处理
             mainImg.onerror = function() {
-                console.error('图片加载失败：', imgOrder[imgIndex]);
+                // console.error('图片加载失败：', imgOrder[imgIndex]);
                 alert('图片加载失败，请刷新页面重试');
             };
         }, 100);
@@ -228,8 +228,8 @@
     setImg();
     
     // 添加调试信息
-    console.log('当前图片索引：', imgIndex);
-    console.log('当前图片文件：', imgOrder[imgIndex]);
+    // console.log('当前图片索引：', imgIndex);
+    // console.log('当前图片文件：', imgOrder[imgIndex]);
 
     // ========== 画矩形功能 ==========
     const clearBtn = document.getElementById('clear-btn');
@@ -519,7 +519,7 @@
                 throw new Error('无效的图片名称');
             }
 
-            console.log('当前图片名称:', currentImageName);
+            // console.log('当前图片名称:', currentImageName);
 
             let annotatedImageBase64 = '';
             
@@ -577,10 +577,10 @@
                 }))
             };
 
-            console.log('准备提交的标注数据:', {
-                ...annotationData,
-                rectangles: annotationData.rectangles.length + '个标注区域'
-            });
+            // console.log('准备提交的标注数据:', {
+            //     ...annotationData,
+            //     rectangles: annotationData.rectangles.length + '个标注区域'
+            // });
 
             // 提交到服务器
             const submitSuccess = await window.submitToServer(annotationData, 'main-annotate.html');
@@ -609,7 +609,7 @@
             setEditMode(true);
             renderAnnotationList();
         } catch (error) {
-            console.error('保存失败:', error);
+            // console.error('保存失败:', error);
             errorMessage.textContent = '保存失败，请重试: ' + error.message;
             errorMessage.style.display = 'block';
             confirmDialog.style.display = 'none';
@@ -669,7 +669,7 @@
             sessionStorage.setItem('annotations', JSON.stringify(annotations));
             window.location.href = `tool-verify.html?img=${imgOrder[imgIndex]}`;
         } catch (error) {
-            console.error('跳转失败:', error);
+            // console.error('跳转失败:', error);
             alert('跳转失败，请重试');
         }
     };
