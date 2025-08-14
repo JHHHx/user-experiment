@@ -437,6 +437,9 @@
         const imgOrder = JSON.parse(sessionStorage.getItem('imgOrder'));
         let imgIndex = parseInt(sessionStorage.getItem('imgIndex'));
         
+        // 时间跟踪变量
+        let pageStartTime = Date.now();
+        
         // 设置进度显示
         document.getElementById('progress-header').textContent = `工具验证 第${imgIndex + 1}张（共14张）`;
         
@@ -496,6 +499,8 @@
             const noDpMsg = document.getElementById('no-dp-message');
             return noDpMsg && noDpMsg.style.display !== 'none';
         }
+        
+
         
         // 只在非no dp图片时渲染问题弹窗和检查机制
         if (!isNoDpImg()) {
@@ -667,11 +672,16 @@
                 });
             }
             
+            // 计算页面停留时间
+            const pageEndTime = Date.now();
+            const timeSpentSeconds = Math.round((pageEndTime - pageStartTime) / 1000);
+            
             // 提交答案到服务器
             try {
                 const submitSuccess = await window.submitToServer({
                     image: originalImgName,
                     answers: answers,
+                    timeSpentSeconds: timeSpentSeconds,
                     timestamp: new Date().toISOString()
                 }, 'tool-verify.html');
                 
@@ -682,6 +692,7 @@
                     savedAnswers.push({
                         image: originalImgName,
                         answers: answers,
+                        timeSpentSeconds: timeSpentSeconds,
                         timestamp: new Date().toISOString()
                     });
                     localStorage.setItem('toolVerifyAnswers', JSON.stringify(savedAnswers));

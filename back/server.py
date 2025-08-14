@@ -123,8 +123,8 @@ def submit():
                 # 保存用户基本信息
                 # print(f"处理用户基本信息...")
                 sql = """INSERT INTO user_basic_info 
-                        (user_id, age, gender, major) 
-                        VALUES (%s, %s, %s, %s)"""
+                    (user_id, age, gender, major) 
+                    VALUES (%s, %s, %s, %s)"""
                 cursor.execute(sql, (
                     user_id,
                     content_data.get('age'),
@@ -160,12 +160,13 @@ def submit():
             # print(f"处理工具验证答案...")
             verify_data = json.loads(content)
             sql = """INSERT INTO tool_verify_answers 
-                    (user_id, image_name, answers) 
-                    VALUES (%s, %s, %s)"""
+                    (user_id, image_name, answers, time_spent_seconds) 
+                    VALUES (%s, %s, %s, %s)"""
             cursor.execute(sql, (
                 user_id,
                 verify_data.get('image'),
-                json.dumps(verify_data.get('answers'))
+                json.dumps(verify_data.get('answers')),
+                verify_data.get('timeSpentSeconds')
             ))
             # print(f"工具验证答案保存成功")
             
