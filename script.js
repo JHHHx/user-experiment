@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     content: JSON.stringify({
                         image: data.image,
                         answers: data.answers,
+                        timeSpentSeconds: data.timeSpentSeconds,
                         timestamp: new Date().toISOString()
                     }),
                     page: pageName
