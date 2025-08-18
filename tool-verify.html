@@ -664,6 +664,12 @@
                 // 收集双弹窗答案
                 answers.dpAnswers = dpAnswers;
                 answers.detailDpAnswers = detailDpAnswers;
+
+                // 同步保存位置信息价值评分（location_value），与普通图片保持一致
+                const loc = document.querySelector('.question-content input[name="location_value"]:checked');
+                if (loc) {
+                    answers.location_value = loc.value;
+                }
             } else {
                 // 收集普通问题答案
                 const allRadios = document.querySelectorAll('.question-content input[type="radio"]:checked');
